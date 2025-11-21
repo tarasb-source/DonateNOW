@@ -15,7 +15,11 @@ useEffect(() => {
     return (
         <>
         <div className="banner-background">
-        <img className="donateNOW-logo" src="/images/Donate NOW logo.png" alt="Donate NOW logo"/>
+        <img
+          className="donateNOW-logo"
+          src={`${import.meta.env.BASE_URL}images/Donate NOW logo.png`}
+          alt="Donate NOW logo"
+        />
         </div>
         <div className="page-content home-page">
                 <div className="page-content">
@@ -27,7 +31,11 @@ useEffect(() => {
             <span className="moneyRaised">{moneyRaised} $</span>
             </div>
             <p>Want to get involved, click below</p>
-            <img className="arrow" src="/images/Arrow Down.png" alt="Arrow Down"/>
+            <img
+              className="arrow"
+              src={`${import.meta.env.BASE_URL}images/Arrow Down.png`}
+              alt="Arrow Down"
+            />
             <Link to="/donate">
                 <button className="primary-btn">
                 Help Ukraine Now!

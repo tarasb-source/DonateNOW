@@ -26,11 +26,19 @@ const [openMenu, setMenuOpen] = useState(false);
                 <li>In-Person Donation: Visit our office to make a donation in person.</li>
             </ul>
                 <h3>Here is the list of official organizations that need your help:</h3>
-                <img className="arrow" src="/images/Arrow Down.png" alt="Arrow Down"/>
+                <img
+                    className="arrow"
+                    src={`${import.meta.env.BASE_URL}images/Arrow Down.png`}
+                    alt="Arrow Down"
+                />
                 <ul className="organization-list">
                 <li class="org-block-left org-block">
                 <h4 className="organization">Charitable foundation "With An Angel On A Shoulder"</h4>
-                    <img className="charity-img" src="/images/Angel On A Shoulder.jpg" alt='Charitable foundation "With An Angel On A Shoulder"'></img>
+                    <img
+                        className="charity-img"
+                        src={`${import.meta.env.BASE_URL}images/Angel On A Shoulder.jpg`}
+                        alt='Charitable foundation "With An Angel On A Shoulder"'
+                    />
                     <h4>About the organization:</h4>
                     <p>A Ukrainian organization founded in 2017 that provides aid to children and young adults with serious illnesses, orphans, 
                         and those in difficult life situations. It also supports social and medical institutions, elderly care, low-income groups, 
@@ -47,7 +55,11 @@ const [openMenu, setMenuOpen] = useState(false);
                 </li>
                 <li className="org-block-right org-block">
                 <h4 className="organization-right">Official Website of Ukraine</h4>
-                    <img className="charity-img" src="/images/Official website of Ukraine.jpg" alt='Official Website of Ukraine'></img>
+                    <img
+                        className="charity-img"
+                        src={`${import.meta.env.BASE_URL}images/Official website of Ukraine.jpg`}
+                        alt="Official Website of Ukraine"
+                    />
                     <h4>About the organization:</h4>
                     <p>The initiative of the President of Ukraine The President of Ukraine announced the creation 
                         of a transparent platform for donations to Ukraine during the war with Russia. 
@@ -63,7 +75,11 @@ const [openMenu, setMenuOpen] = useState(false);
                 </li>    
                 <li className="org-block-left org-block">
                 <h4 className="organization">Children of The Heroes</h4>
-                    <img className="charity-img" src="/images/Children of the heroes.png" alt='Charitable foundation "Children of The Heroes"'></img>
+                    <img
+                        className="charity-img"
+                        src={`${import.meta.env.BASE_URL}images/Children of the heroes.png`}
+                        alt='Charitable foundation "Children of the Heroes"'
+                    />
                     <h4>About the organization:</h4>
                     <p>
                         Children of Heroes was founded to help the countless number of Ukrainian children 
@@ -81,7 +97,11 @@ const [openMenu, setMenuOpen] = useState(false);
                 </li>
                 <li className="org-block-right org-block">
                 <h4 className="organization">Ukraine Aid Operations</h4>
-                <img className="charity-img" src="/images/Ukraine aid ops.png" alt='Ukraine Aid Operations Organization'></img>
+                <img
+                    className="charity-img"
+                    src={`${import.meta.env.BASE_URL}images/Ukraine aid ops.png`}
+                    alt="Ukraine Aid Operations"
+                />
                     <h4>About the organization:</h4>
                     <p>
                         An international group of volunteers securing protective aid and life-saving equipment, 

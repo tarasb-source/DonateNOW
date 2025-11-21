@@ -9,7 +9,11 @@ export default function Header() {
         <header>
             <div id="header-wrapper" className="header-wrapper">
                 <Link to="/">
-                <img className="site-logo" src="/images/Logo.png" alt="donateNOW Logo" />
+                    <img
+                        className="site-logo"
+                        src={`${import.meta.env.BASE_URL}images/Logo.png`}
+                        alt="donateNOW Logo"
+                    />
                 </Link>
 
                 <nav className="nav-links">

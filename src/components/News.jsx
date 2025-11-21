@@ -49,7 +49,7 @@ export default function News() {
               rel="noopener noreferrer"
             >
               <img
-                src={article.image || "/images/fallback.jpg"}
+                src={article.image || `${import.meta.env.BASE_URL}images/fallback.jpg`}
                 className="d-block w-100"
                 alt="News visual"
               />
