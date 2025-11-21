@@ -1,0 +1,74 @@
+  .contact-page p {
+    margin-bottom: 3rem;
+  }
+
+  .newsletter {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.2rem;
+  }
+
+  .newsletter input[type="email"], input[type="text"] {
+    grid-column: 2;
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .newsletter input[type="email"]:focus, input[type="text"]:focus, textarea:focus {
+    outline: none;
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .newsletter input::placeholder, .newsletter textarea::placeholder, .newsletter textarea::placeholder {
+    color: rgba(255, 255, 255, 0.612);
+  }
+
+  .newsletter textarea {
+    grid-column: 2;
+    padding: 0.75rem;
+    resize: none;
+    
+  }
+
+  .newsletter label {
+    grid-column: 1;
+  }
+
+  .checkbox-row {
+    grid-column: 1 / -1; 
+    justify-self: center;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row-reverse;
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    margin-bottom: 0.22rem;
+  }
+
+  .checkbox-row label:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .checkbox-row input:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .newsletter button {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 1rem;
+  }
+
+  .submit-msg {
+    margin-top: 25px;
+    text-align: center;
+    border: 1px solid #28a745;
+    background-color: #d4edda;
+    padding: 1rem;
+    border-radius: 7px;
+    z-index: 7000;
+  }

@@ -1,0 +1,168 @@
+.donate-buttons-container {
+    display: grid;
+    grid-template-columns: 2fr 2fr 2fr;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .donate-button {
+    background-color: #065ab5;
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+
+  .donate-button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .donate-button:focus {
+    background-color: #dfbe00;
+  }
+
+  .donate-custom {
+    margin-top: 0.5rem;
+    grid-column: 1 / -1;
+    align-self: center;
+    padding: 0.75rem;
+    text-align: center;
+    border-radius: 2px;
+    border: none;
+  }
+
+  .donate-custom::placeholder {
+    color: white;
+    opacity: 0.85;
+    font-size: 1rem;
+  }
+
+  .submit-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #065ab5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .close-donate-menu {
+    position: absolute;
+    top: 0.25rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: black;
+    font: inherit;
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .donate-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1.75rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 110;
+    width: 100%;
+    max-width: 90%;
+    display: grid;
+    justify-items: center;
+  }
+
+
+  .donate-menu-container {
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 100;
+    top: 0;
+    position: fixed;
+    width: 100vw;
+    height: 100%;
+  }
+
+  
+  ul {
+    padding: 0.25rem;
+    list-style-type: decimal;
+  }
+
+  .organization {
+    font: inherit;
+    font-size: 1.2rem;
+    font-weight: 650;
+  }
+
+  .charity-img {
+    height: auto;
+    width: 350px;
+    object-fit: cover;
+    border-radius: 2px;
+
+  }
+
+  .visit-btn {
+    margin-top: 1rem;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    background-color:#0f700c;
+  }
+
+  .visit-btn:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .donate-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .donate-info h3 {
+    text-align: center;
+  }
+
+  .org-block {
+    margin-bottom: 2rem;
+    padding: 0 0.4rem 0.4rem 0.4rem;
+    list-style-type: decimal;
+  }
+
+  .org-block img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .donate-page li::marker {
+    font-weight: bold;
+  }
+
+  .donate-header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .donate-button {
+    margin: 0 0.5rem;
+    z-index: 10;
+    background-color: #065AB5;
+  }

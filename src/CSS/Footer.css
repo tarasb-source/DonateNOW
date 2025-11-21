@@ -1,0 +1,20 @@
+  footer {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 480;
+    padding: 40px 0;
+    border-top: 1px solid #dbdbdb;
+    background-color: #065ab5;
+    color: white;
+  }
+
+  footer a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+  }

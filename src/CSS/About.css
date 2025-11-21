@@ -1,0 +1,14 @@
+  .about-us-page h2, p {
+    align-self: baseline;
+    margin-bottom: auto;
+  }
+
+
+  .about-us-page .primary-btn {
+    margin-top: 1.5rem;
+  }
+
+  .about-us-page p {
+      text-align: left;
+      width: 100%;
+  }
