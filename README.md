@@ -1,16 +1,24 @@
-# React + Vite
+# DonateNOW 
+**DonateNOW** is a simple, responsive website designed to raise awareness about the war in Ukraine and provide information about where to donate money and find volunteer opportunities. While the donation system is implemented only as a demonstration and does not process real payments, the information about charities and volunteer opportunities is accurate.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+**Live Website:**  
+https://tarasb-source.github.io/DonateNOW/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Clean and modern UI
+- Responsive design (desktop & mobile friendly)
+- Clear donation-focused layout
+- Hosted using **GitHub Pages**
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Built With
+
+- **HTML**
+- **CSS3**
+- **JavaScript**
+- **GitHub Pages** for deployment
