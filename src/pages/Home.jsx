@@ -42,7 +42,6 @@ useEffect(() => {
                 </button>
             </Link>
             <br/>
-            <News />
             </div>
         </div>
         </> 
