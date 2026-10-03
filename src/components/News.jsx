@@ -49,10 +49,15 @@ export default function News() {
               rel="noopener noreferrer"
             >
               <img
-                src={article.image || `${import.meta.env.BASE_URL}images/fallback.jpg`}
+                src={
+                  article.image && article.image.startsWith("https")
+                    ? article.image
+                    : `${import.meta.env.BASE_URL}images/fallback.jpg`
+                }
                 className="d-block w-100"
                 alt="News visual"
               />
+
             </a>
 
             <div className="carousel-caption d-md-block">
