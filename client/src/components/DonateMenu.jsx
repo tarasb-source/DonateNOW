@@ -1,5 +1,6 @@
 import { useState } from "react";
-import '../CSS/Donate.css';
+import SuccessMessage from "./ui/SuccessMessage.jsx";
+import { buttonStyles } from "./ui/buttonStyles.js";
 
 export default function DonateMenu({ closeMenu }) {
   const [submitted, setSubmitted] = useState(false);
@@ -31,24 +32,28 @@ export default function DonateMenu({ closeMenu }) {
   }
 
   return (
-    <div className="donate-menu-container">
-      <form className="donate-menu" onSubmit={handleSubmit}>
+    <div className="fixed inset-0 z-100 bg-black/45">
+      <form
+        className="fixed top-1/2 left-1/2 z-110 grid w-[95%] -translate-1/2 justify-items-center rounded-lg bg-white p-5 shadow-md min-[481px]:w-full min-[481px]:max-w-[90%] min-[481px]:p-7 sm:w-[90%] sm:max-w-[500px]"
+        onSubmit={handleSubmit}
+      >
         <button
           type="button"
-          className="close-donate-menu"
+          className="absolute top-1 right-4 cursor-pointer p-2 text-2xl"
           onClick={closeMenu}
+          aria-label="Close donate menu"
         >
           ✖
         </button>
 
-        <h2>Select Donation Amount</h2>
+        <h2 className="text-center sm:m-5">Select Donation Amount</h2>
 
-        <div className="donate-buttons-container">
+        <div className="mt-8 grid grid-cols-2 gap-3 min-[481px]:grid-cols-3 min-[481px]:gap-4 sm:text-[18px]">
           {[500, 200, 100, 50, 20, 10].map((amount) => (
             <button
               key={amount}
               type="button"
-              className="donate-button"
+              className={buttonStyles(selectedAmount === amount ? "accent" : "primary", "lg")}
               onClick={() => handlePresetClick(amount)}
             >
               {amount} $
@@ -56,7 +61,7 @@ export default function DonateMenu({ closeMenu }) {
           ))}
 
           <input
-            className="donate-custom"
+            className="col-span-full mt-2 w-full rounded-sm border border-gray-300 p-3 text-center placeholder:text-gray-500"
             type="number"
             placeholder="Enter custom amount $"
             onChange={handleCustomChange}
@@ -64,21 +69,21 @@ export default function DonateMenu({ closeMenu }) {
         </div>
 
         {selectedAmount && (
-          <p style={{ marginTop: "1rem", fontWeight: "500" }}>
+          <p className="mt-4 font-medium">
             Selected: {selectedAmount} $
           </p>
         )}
 
-        <button type="submit" className="submit-button">
+        <button type="submit" className={`${buttonStyles()} mt-4 w-full min-[481px]:w-auto`}>
           Confirm donation?
         </button>
 
         {submitted && (
-          <p className="submit-msg">
+          <SuccessMessage>
             Your donation was successfully submitted! 🎉
             <br />
             Thank you for your help!
-          </p>
+          </SuccessMessage>
         )}
       </form>
     </div>

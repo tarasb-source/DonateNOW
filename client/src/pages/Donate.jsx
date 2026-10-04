@@ -1,128 +1,58 @@
 import { useState } from "react";
-import '../CSS/Donate.css';
+import Page from "../components/ui/Page.jsx";
 import DonateMenu from "../components/DonateMenu.jsx";
+import { buttonStyles } from "../components/ui/buttonStyles.js";
+import { organizations } from "../data/organizations.js";
 
 export default function Donate() { 
 const [openMenu, setMenuOpen] = useState(false);
 
     return (
-        <div className="page-content donate-page">
-            <h1>Donate here!</h1>
-            <div className="donate-header">
+        <Page title="Donate here!" className="sm:px-12 sm:pb-12">
             <button
-                className="donate-button"
+                className={`${buttonStyles("primary", "lg")} mx-2`}
                 onClick={() => setMenuOpen(true)}
-                >
-                Donate menu</button>
-                
-            </div>
-                <div className="donate-info">
+            >
+                Donate menu
+            </button>
+
+            <div className="flex w-full flex-col gap-2">
                 <h2>Donation Methods</h2>
-            <p>Your support can make a difference. Choose a donation method below:</p>
-            <ul>
-                <li>Online Donation: Use our secure online platform to make a one-time or recurring donation.</li>
-                <li>Bank Transfer: Transfer funds directly to our bank account. Contact us for details.</li>
-                <li>Mail a Check: Send a check payable to "DonateNOW" to our mailing address.</li>
-                <li>In-Person Donation: Visit our office to make a donation in person.</li>
-            </ul>
-                <h3>Here is the list of official organizations that need your help:</h3>
+                <p>Your support can make a difference. Choose a donation method below:</p>
+                <ul className="list-decimal pl-6">
+                    <li>Online Donation: Use our secure online platform to make a one-time or recurring donation.</li>
+                    <li>Bank Transfer: Transfer funds directly to our bank account. Contact us for details.</li>
+                    <li>Mail a Check: Send a check payable to "DonateNOW" to our mailing address.</li>
+                    <li>In-Person Donation: Visit our office to make a donation in person.</li>
+                </ul>
+                <h3 className="text-center">Here is the list of official organizations that need your help:</h3>
                 <img
-                    className="arrow"
+                    className="size-[75px] self-center"
                     src={`${import.meta.env.BASE_URL}images/Arrow Down.png`}
                     alt="Arrow Down"
                 />
-                <ul className="organization-list">
-                <li className="org-block-left org-block">
-                <h4 className="organization">Charitable foundation "With An Angel On A Shoulder"</h4>
-                    <img
-                        className="charity-img"
-                        src={`${import.meta.env.BASE_URL}images/Angel On A Shoulder.jpg`}
-                        alt='Charitable foundation "With An Angel On A Shoulder"'
-                    />
-                    <h4>About the organization:</h4>
-                    <p>A Ukrainian organization founded in 2017 that provides aid to children and young adults with serious illnesses, orphans, 
-                        and those in difficult life situations. It also supports social and medical institutions, elderly care, low-income groups, 
-                        animals, and refugees, with its work intensifying during the war 
-                        to include support for the military and war-displaced individuals.
-                        </p>
-                    <a 
-                        href="https://www.angelfund.com.ua/en" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        >
-                        <button className="visit-btn">Visit official website</button>
-                    </a>
-                </li>
-                <li className="org-block-right org-block">
-                <h4 className="organization-right">Official Website of Ukraine</h4>
-                    <img
-                        className="charity-img"
-                        src={`${import.meta.env.BASE_URL}images/Official website of Ukraine.jpg`}
-                        alt="Official Website of Ukraine"
-                    />
-                    <h4>About the organization:</h4>
-                    <p>The initiative of the President of Ukraine The President of Ukraine announced the creation 
-                        of a transparent platform for donations to Ukraine during the war with Russia. 
-                        You can choose one of the categories to donate to: Defence and demining Medical aid 
-                        Rebuilt Ukraine Available options for financial transfer: credit card, bank transfer, PayPal.</p>
-                    <a 
-                        href="https://u24.gov.ua/" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        >
-                        <button className="visit-btn">Visit official website</button>
-                    </a>
-                </li>    
-                <li className="org-block-left org-block">
-                <h4 className="organization">Children of The Heroes</h4>
-                    <img
-                        className="charity-img"
-                        src={`${import.meta.env.BASE_URL}images/Children of the heroes.png`}
-                        alt='Charitable foundation "Children of the Heroes"'
-                    />
-                    <h4>About the organization:</h4>
-                    <p>
-                        Children of Heroes was founded to help the countless number of Ukrainian children 
-                        who have suffered the ultimate tragedy: the loss of a parent, or parents, during the ongoing war. 
-                        The Fund provides the children and their families with comprehensive assistance, 
-                        led by our team of Family Helpers. Our assistance programs are funded by our partners and donors.
-                    </p>
-                    <a 
-                        href="https://childrenheroes.org/en/" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        >
-                        <button className="visit-btn">Visit official website</button>
-                    </a>
-                </li>
-                <li className="org-block-right org-block">
-                <h4 className="organization">Ukraine Aid Operations</h4>
-                <img
-                    className="charity-img"
-                    src={`${import.meta.env.BASE_URL}images/Ukraine aid ops.png`}
-                    alt="Ukraine Aid Operations"
-                />
-                    <h4>About the organization:</h4>
-                    <p>
-                        An international group of volunteers securing protective aid and life-saving equipment, 
-                        delivered directly into the hands of Ukrainian defenders.
-                        As registered 501(c)(3) nonprofit charity, their donations are deductible to 
-                        the full extent allowable under IRS regulations. If you want to support their work in Ukraine, 
-                        you can make a donation on their website. They provide: protective gear (helmets, plates, ear protection),
-                        clothing (uniforms, shoes, tactical gloves), technical equipment (drones, night vision devices),
-                        medical equipment (IFAKs, Tourniquets), communication devices (starlinks, secure radios),
-                        vehicles (ambulances, med-evac cars).
-                    </p>
-                    <a 
-                        href="https://ukraineaidops.org/" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        >
-                        <button className="visit-btn">Visit official website</button>
-                    </a>
-                </li>
-                </ul>
-                    
+                <ol className="list-decimal pl-6 marker:font-bold">
+                    {organizations.map((org, i) => (
+                        <li key={org.name} className={`my-5 mb-8 px-1.5 pb-1.5 ${i % 2 === 0 ? "text-left" : "text-right"}`}>
+                            <h4 className="text-[1.2rem] font-[650]">{org.name}</h4>
+                            <img
+                                className="inline-block h-auto w-[350px] max-w-full rounded-lg object-cover sm:w-[500px]"
+                                src={`${import.meta.env.BASE_URL}images/${org.image}`}
+                                alt={org.name}
+                            />
+                            <h4 className="mt-2">About the organization:</h4>
+                            <p>{org.description}</p>
+                            <a
+                                href={org.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`${buttonStyles("success", "sm")} mt-4`}
+                            >
+                                Visit official website
+                            </a>
+                        </li>
+                    ))}
+                </ol>
             </div>
             <p>Thank you for your support!</p>
 
@@ -131,6 +61,6 @@ const [openMenu, setMenuOpen] = useState(false);
                     closeMenu={() => setMenuOpen(false)}
                 />
             )}
-        </div>
+        </Page>
     );
 }
