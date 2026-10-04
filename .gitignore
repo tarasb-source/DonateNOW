@@ -23,10 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment
+server/.env
 .env
-.env.*
-!.env.example
-
-# Generated Prisma client
-server/src/generated
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

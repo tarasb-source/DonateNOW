@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
     }
 
     const url = new URL("https://gnews.io/api/v4/search");
-    url.search = new URLSearchParams({ q: "Ukraine", lang: "en", country: "us", max: "5", apikey: config.gnewsApiKey });
+    url.search = new URLSearchParams({ q: "Ukraine", lang: "en", country: "us", max: "10", apikey: config.gnewsApiKey });
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -27,14 +27,23 @@ router.get("/", async (req, res) => {
     }
 
     const data = await response.json();
-    const articles = (data.articles ?? []).map(({ title, description, url, image, publishedAt, source }) => ({
-        title,
-        description,
-        url,
-        image,
-        publishedAt,
-        source: source?.name,
-    }));
+    // Syndicated stories show up once per newspaper (with varying capitalization), so drop repeated titles.
+    const seenTitles = new Set();
+    const isNewTitle = (title) => {
+        const key = title.toLowerCase().replace(/[^a-z0-9]/g, "");
+        return !seenTitles.has(key) && seenTitles.add(key);
+    };
+    const articles = (data.articles ?? [])
+        .filter(({ title }) => isNewTitle(title))
+        .slice(0, 5)
+        .map(({ title, description, url, image, publishedAt, source }) => ({
+            title,
+            description,
+            url,
+            image,
+            publishedAt,
+            source: source?.name,
+        }));
 
     cache = { articles, fetchedAt: Date.now() };
     res.json(articles);
