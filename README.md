@@ -59,3 +59,12 @@ npm run deploy    # build and publish the frontend to GitHub Pages
 | GET    | `/api/opportunities`  | Volunteer opportunities (`?q=`, `?category=`) |
 | POST   | `/api/contact`        | Save a contact form message                  |
 | GET    | `/api/news`           | Ukraine news via GNews (cached 30 min)       |
+| GET    | `/api/events`         | Upcoming events (`?lat=&lng=&radius=` km sorts by distance) |
+| GET    | `/api/geocode`        | City name to coordinates via OpenStreetMap Nominatim |
+
+### Adding events
+
+Add rows in Supabase's Table Editor, run `npm run db:studio -w server`, or list them in
+`server/prisma/seed-events.js` (see the example there) and run `npm run db:seed -w server`
+on an empty Event table. Each event needs a start time with timezone, a city/country,
+and latitude/longitude for the map.
