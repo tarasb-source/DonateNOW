@@ -1,29 +1,42 @@
 import { useState } from "react";
 import Page from "../components/ui/Page.jsx";
-import DonateMenu from "../components/DonateMenu.jsx";
+import DonateDialog from "../components/DonateDialog.jsx";
 import { buttonStyles } from "../components/ui/buttonStyles.js";
 import { organizations } from "../data/organizations.js";
 
+const donatable = organizations.filter((org) => org.everyOrgSlug);
+
 export default function Donate() { 
-const [openMenu, setMenuOpen] = useState(false);
+// Every.org slug of the charity the dialog opens with, or null when closed.
+const [dialogSlug, setDialogSlug] = useState(null);
 
     return (
         <Page title="Donate here!" className="sm:px-12 sm:pb-12">
-            <button
-                className={`${buttonStyles("primary", "lg")} mx-2`}
-                onClick={() => setMenuOpen(true)}
-            >
-                Donate menu
-            </button>
+            {donatable.length > 0 && (
+                <button
+                    className={`${buttonStyles("primary", "lg")} mx-2`}
+                    onClick={() => setDialogSlug(donatable[0].everyOrgSlug)}
+                >
+                    Donate now
+                </button>
+            )}
 
             <div className="flex w-full flex-col gap-2">
-                <h2>Donation Methods</h2>
-                <p>Your support can make a difference. Choose a donation method below:</p>
-                <ul className="list-decimal pl-6">
-                    <li>Online Donation: Use our secure online platform to make a one-time or recurring donation.</li>
-                    <li>Bank Transfer: Transfer funds directly to our bank account. Contact us for details.</li>
-                    <li>Mail a Check: Send a check payable to "DonateNOW" to our mailing address.</li>
-                    <li>In-Person Donation: Visit our office to make a donation in person.</li>
+                <h2>How donating works</h2>
+                <p>
+                    DonateNOW doesn't collect money itself. Your donation goes straight to the organization you choose:
+                </p>
+                <ul className="list-disc pl-6">
+                    <li>
+                        <strong>Donate via Every.org:</strong> for organizations listed on{" "}
+                        <a href="https://www.every.org" target="_blank" rel="noopener noreferrer" className="text-brand underline">Every.org</a>,
+                        a nonprofit donation platform. Pay by card, PayPal, Venmo, Apple Pay, Google Pay, and more;
+                        Every.org sends the funds to the charity and emails you a tax receipt.
+                    </li>
+                    <li>
+                        <strong>Official website:</strong> every organization below also accepts donations directly
+                        on its own site.
+                    </li>
                 </ul>
                 <h3 className="text-center">Here is the list of official organizations that need your help:</h3>
                 <img
@@ -42,23 +55,36 @@ const [openMenu, setMenuOpen] = useState(false);
                             />
                             <h4 className="mt-2">About the organization:</h4>
                             <p>{org.description}</p>
-                            <a
-                                href={org.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`${buttonStyles("success", "sm")} mt-4`}
-                            >
-                                Visit official website
-                            </a>
+                            <div className={`mt-4 flex flex-wrap gap-3 ${i % 2 === 0 ? "justify-start" : "justify-end"}`}>
+                                {org.everyOrgSlug && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setDialogSlug(org.everyOrgSlug)}
+                                        className={buttonStyles("primary", "sm")}
+                                    >
+                                        Donate via Every.org
+                                    </button>
+                                )}
+                                <a
+                                    href={org.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={buttonStyles("success", "sm")}
+                                >
+                                    Visit official website
+                                </a>
+                            </div>
                         </li>
                     ))}
                 </ol>
             </div>
             <p>Thank you for your support!</p>
 
-            { openMenu && (
-                <DonateMenu
-                    closeMenu={() => setMenuOpen(false)}
+            {dialogSlug && (
+                <DonateDialog
+                    charities={donatable}
+                    initialSlug={dialogSlug}
+                    onClose={() => setDialogSlug(null)}
                 />
             )}
         </Page>
