@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Page from "../components/ui/Page.jsx";
+import News from "../components/News.jsx";
 import { buttonStyles } from "../components/ui/buttonStyles.js";
 
 export default function Home() { 
@@ -31,6 +32,7 @@ const moneyRaised = Number(localStorage.getItem("moneyRaised")) || 12500;
             <Link to="/donate" className={buttonStyles()}>
                 Help Ukraine Now!
             </Link>
+            <News />
         </Page>
         </> 
     );

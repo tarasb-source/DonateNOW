@@ -1,35 +1,13 @@
 import { useState } from "react";
 import CategoryFilter from "../components/CategoryFilter.jsx";
 import OpportunityCard from "../components/OpportunityCard.jsx";
-import { categories, opportunities as allOpportunities } from "../data/opportunities.js";
+import { categories } from "../data/categories.js";
+import { useOpportunities } from "../hooks/useOpportunities.js";
 
 export default function Volunteering() {
 const [searchTerm, setSearchTerm] = useState("");
 const [currentCategory, setCurrentCategory] = useState("All");
-
-const filterOpportunities = () => {
-    let results = allOpportunities;
-
-    if (currentCategory != "All") {
-        results = results.filter((opp) => 
-        opp.category.toLowerCase().includes(currentCategory.toLowerCase()) ||
-        opp.location.toLowerCase().includes(currentCategory.toLowerCase()) ||
-        opp.tags.toLowerCase().includes(currentCategory.toLowerCase())
-    );
-    }
-
-    if (searchTerm.trim() != "") {
-        const term = searchTerm.toLowerCase();
-        results = results.filter(
-            (opp) => opp.title.toLowerCase().includes(term) || opp.organization.toLowerCase().includes(term) 
-            || opp.category.toLowerCase().includes(term) || opp.tags.toLowerCase().includes(term) 
-            || opp.location.toLowerCase().includes(term)
-        );
-    }
-
-    return results;
-}
-const opportunities = filterOpportunities();
+const { opportunities, loading, error } = useOpportunities({ search: searchTerm, category: currentCategory });
 
     return (
         <div className="mx-auto my-8 flex w-full max-w-[900px] flex-col gap-6 px-4 text-center">
@@ -50,14 +28,18 @@ const opportunities = filterOpportunities();
 
             <hr className="border-gray-300" />
 
-            <div className="flex flex-col gap-6 md:grid md:grid-cols-2">
-                {opportunities.length === 0 ? (
+            {error ? (
+                <p className="text-red-700">Couldn't load opportunities. Please try again later.</p>
+            ) : (
+            <div className={`flex flex-col gap-6 transition-opacity md:grid md:grid-cols-2 ${loading ? "opacity-50" : ""}`}>
+                {!loading && opportunities.length === 0 ? (
                     <p>No opportunities found matching your criteria.</p>
                 ) : (opportunities.map((opp) => (
                     <OpportunityCard key={opp.id} opportunity={opp} />
                 ))
                 )}
             </div>
+            )}
     </div>
     );
 }
