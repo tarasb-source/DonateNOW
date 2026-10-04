@@ -27,4 +27,19 @@
 //       latitude: 41.8781,
 //       longitude: -87.6298,
 //   },
-export const events = [];
+export const events = [
+    // Source: https://unitedhelpukraine.org/events-page/ (checked 2026-10-03)
+    {
+        title: "Meet & Greet the Ukrainian Marine Corps Marathon Team",
+        organization: "United Help Ukraine",
+        description: "Welcome the Ukrainian soldiers of Team Ukraine as they arrive in the U.S. to run the Marine Corps Marathon.",
+        category: "Community",
+        link: "https://unitedhelpukraine.org/events/meet-and-greet-the-mcm/",
+        startsAt: "2026-10-22T17:00:00-04:00",
+        address: "Washington Dulles International Airport, International Arrivals Exit",
+        city: "Dulles, VA",
+        country: "USA",
+        latitude: 38.9531,
+        longitude: -77.4565,
+    },
+];
