@@ -28,14 +28,34 @@ https://tarasb-source.github.io/DonateNOW/
 ## Project Structure
 
 ```
-client/   React + Vite frontend (deployed to GitHub Pages)
+client/   React + Vite + Tailwind frontend (deployed to GitHub Pages)
+server/   Express API + Prisma (PostgreSQL on Supabase)
 ```
 
 ## Development
 
+First-time setup:
+
 ```bash
-npm install       # installs all workspaces
-npm run dev       # start the frontend at http://localhost:5173/DonateNOW/
-npm run build     # production build in client/dist
-npm run deploy    # build and publish to GitHub Pages
+npm install                          # installs all workspaces and generates the Prisma client
+cp server/.env.example server/.env   # then fill in DATABASE_URL (Supabase session pooler)
+npm run db:migrate -w server         # create tables
+npm run db:seed -w server            # load the volunteer opportunities
 ```
+
+Day to day:
+
+```bash
+npm run dev       # frontend at http://localhost:5173/DonateNOW/ + API at http://localhost:3000
+npm run build     # production build in client/dist
+npm run deploy    # build and publish the frontend to GitHub Pages
+```
+
+### API
+
+| Method | Path                  | Description                                  |
+| ------ | --------------------- | -------------------------------------------- |
+| GET    | `/api/health`         | Health check                                 |
+| GET    | `/api/opportunities`  | Volunteer opportunities (`?q=`, `?category=`) |
+| POST   | `/api/contact`        | Save a contact form message                  |
+| GET    | `/api/news`           | Ukraine news via GNews (cached 30 min)       |

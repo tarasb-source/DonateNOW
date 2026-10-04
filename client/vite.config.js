@@ -6,4 +6,10 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   base: "/DonateNOW/",
   plugins: [react(), tailwindcss()],
+  server: {
+    // In dev, forward API calls to the Express server so no CORS setup is needed.
+    proxy: {
+      "/api": "http://localhost:3000",
+    },
+  },
 })
