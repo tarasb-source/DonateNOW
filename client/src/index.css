@@ -1,15 +1,38 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: black;
-  background-color: white;
+@theme {
+  --breakpoint-sm: 37.5rem; /* 600px */
+  --breakpoint-md: 50rem; /* 800px */
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --font-sans: system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  --color-brand: #065ab5;
+  --color-brand-accent: #dfbe00;
+  --color-ua-blue: #056ebc;
+  --color-ua-yellow: #fed707;
+  --color-success: #0f700c;
 }
 
+@layer base {
+  html {
+    line-height: 1.5;
+    text-rendering: optimizeLegibility;
+
+    @variant sm {
+      font-size: 19px;
+    }
+  }
+
+  body {
+    @apply bg-white text-black antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply mb-2 leading-tight font-medium;
+  }
+
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.75rem; }
+  h4 { font-size: 1.5rem; }
+}
