@@ -24,6 +24,7 @@ router.get("/", async (req, res) => {
     const now = new Date();
 
     const upcoming = {
+        status: "APPROVED",
         OR: [
             { endsAt: { gte: now } },
             { endsAt: null, startsAt: { gte: new Date(now.getTime() - ONGOING_GRACE_MS) } },

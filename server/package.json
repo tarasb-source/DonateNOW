@@ -11,9 +11,13 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "events:import": "node --env-file-if-exists=.env scripts/import-events.js",
+    "events:review": "node --env-file-if-exists=.env scripts/review-events.js",
+    "test": "node --test"
   },
   "dependencies": {
+    "@photostructure/tz-lookup": "^11.7.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "cors": "^2.8.6",

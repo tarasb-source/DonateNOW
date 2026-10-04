@@ -45,9 +45,21 @@ model Event {
   country      String
   latitude     Float
   longitude    Float
+  // Only APPROVED events are shown on the site. Imported events start as PENDING.
+  status       EventStatus @default(APPROVED)
+  // Where the event came from ("manual", "google") and that source's ID, to avoid re-importing.
+  source       String    @default("manual")
+  sourceId     String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  @@index([startsAt])
+  @@unique([source, sourceId])
+  @@index([status, startsAt])
   @@index([latitude, longitude])
+}
+
+enum EventStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
