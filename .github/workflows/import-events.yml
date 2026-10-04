@@ -1,0 +1,41 @@
+name: Import events
+
+on:
+  schedule:
+    - cron: "0 13 * * 1" # Mondays 13:00 UTC (morning in the US)
+  workflow_dispatch:
+    inputs:
+      max_searches:
+        description: "Max SerpApi searches for this run (free plan: 250/month)"
+        type: number
+        default: 20
+
+permissions:
+  contents: read
+
+concurrency:
+  group: import-events
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test -w server
+
+      - name: Import events from Google (saved as PENDING for review)
+        run: npm run events:import -w server -- --max-searches="$MAX_SEARCHES"
+        env:
+          # Passed through env (not inlined into the command) so input values can't inject shell code.
+          MAX_SEARCHES: ${{ inputs.max_searches || 20 }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}

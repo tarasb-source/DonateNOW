@@ -41,6 +41,7 @@ npm install                          # installs all workspaces and generates the
 cp server/.env.example server/.env   # then fill in DATABASE_URL (Supabase session pooler)
 npm run db:migrate -w server         # create tables
 npm run db:seed -w server            # load the volunteer opportunities
+npm test -w server                   # run server tests
 ```
 
 Day to day:
@@ -61,6 +62,23 @@ npm run deploy    # build and publish the frontend to GitHub Pages
 | GET    | `/api/news`           | Ukraine news via GNews (cached 30 min)       |
 | GET    | `/api/events`         | Upcoming events (`?lat=&lng=&radius=` km sorts by distance) |
 | GET    | `/api/geocode`        | City name to coordinates via OpenStreetMap Nominatim |
+
+### Importing events from Google
+
+Events are found weekly by searching Google (via [SerpApi](https://serpapi.com)'s free plan,
+250 searches/month) for "Ukrainian events in <city>" across the cities in
+`server/src/eventImport/cities.js`. Results that mention Ukraine in their title or description
+are saved as **PENDING** and only appear on the site once approved.
+
+```bash
+npm run events:import -w server -- --dry-run          # preview without saving
+npm run events:import -w server                       # import (1 search per city)
+npm run events:import -w server -- --city="Chicago, IL"
+npm run events:review -w server                       # approve / reject pending events
+```
+
+The `Import events` GitHub Actions workflow runs the import every Monday. It needs the
+repository secrets `DATABASE_URL` and `SERPAPI_KEY` (Settings → Secrets and variables → Actions).
 
 ### Adding events
 
