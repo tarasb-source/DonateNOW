@@ -7,6 +7,7 @@ import contactRouter from "./routes/contact.js";
 import newsRouter from "./routes/news.js";
 import eventsRouter from "./routes/events.js";
 import geocodeRouter from "./routes/geocode.js";
+import donationsRouter from "./routes/donations.js";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use("/api/contact", contactRouter);
 app.use("/api/news", newsRouter);
 app.use("/api/events", eventsRouter);
 app.use("/api/geocode", geocodeRouter);
+app.use("/api/donations", donationsRouter);
 
 app.use((req, res) => {
     res.status(404).json({ error: "Not found" });

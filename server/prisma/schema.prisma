@@ -51,3 +51,37 @@ model Event {
   @@index([startsAt])
   @@index([latitude, longitude])
 }
+
+// A visitor clicked "Donate" on our site; its id is sent to Every.org as partner_donation_id.
+model DonationIntent {
+  id            String             @id @default(uuid())
+  nonprofitSlug String
+  // Suggested amount in cents; the donor can still change it on Every.org.
+  amountCents   Int?
+  frequency     DonationFrequency
+  createdAt     DateTime           @default(now())
+  donations     Donation[]
+}
+
+// A completed charge reported by Every.org's webhook. Monthly donations produce one per month.
+model Donation {
+  id             Int               @id @default(autoincrement())
+  chargeId       String            @unique
+  intent         DonationIntent    @relation(fields: [intentId], references: [id])
+  intentId       String
+  nonprofitSlug  String
+  nonprofitName  String
+  amountCents    Int
+  netAmountCents Int?
+  currency       String
+  frequency      DonationFrequency
+  donatedAt      DateTime          @db.Timestamptz(3)
+  createdAt      DateTime          @default(now())
+
+  @@index([intentId])
+}
+
+enum DonationFrequency {
+  ONCE
+  MONTHLY
+}
