@@ -16,7 +16,7 @@ const [submitted, setSubmitted] = useState(false);
                 }}
                 onFocus={() => setSubmitted(false)}
                 >
-                <label for="name">Name:</label>
+                <label htmlFor="name">Name:</label>
                 <input 
                     type="text" 
                     id="name" 
@@ -24,7 +24,7 @@ const [submitted, setSubmitted] = useState(false);
                     placeholder="Enter you name here" 
                     required />
                 <br />
-                <label for="email">Email:</label>
+                <label htmlFor="email">Email:</label>
                 <input 
                     type="email" 
                     id="email" 
@@ -32,12 +32,11 @@ const [submitted, setSubmitted] = useState(false);
                     placeholder="example@domain.com" 
                     required />
                 <br />
-                <label for="message">Message:</label>
+                <label htmlFor="message">Message:</label>
                 <textarea 
-                    type="message" 
                     id="message" 
                     name="message" 
-                    maxlength="750" 
+                    maxLength="750" 
                     placeholder="Your message here..." 
                     onInput={ (textarea) => {
                         textarea.target.style.height = "auto";
@@ -48,7 +47,7 @@ const [submitted, setSubmitted] = useState(false);
                 <br />
                 <div className="checkbox-row">
                     <input type="checkbox" id="newsletter" name="newsletter" value="Subscribe"></input>
-                    <label for="newsletter" htmlFor="newsletter"> Do you want to subscribe to our newsletter?</label>
+                    <label htmlFor="newsletter"> Do you want to subscribe to our newsletter?</label>
                  </div>
                 <button type="submit" className="primary-btn">Submit</button>
             </form>

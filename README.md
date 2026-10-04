@@ -22,3 +22,20 @@ https://tarasb-source.github.io/DonateNOW/
 - **CSS3**
 - **JavaScript**
 - **GitHub Pages** for deployment
+
+---
+
+## Project Structure
+
+```
+client/   React + Vite frontend (deployed to GitHub Pages)
+```
+
+## Development
+
+```bash
+npm install       # installs all workspaces
+npm run dev       # start the frontend at http://localhost:5173/DonateNOW/
+npm run build     # production build in client/dist
+npm run deploy    # build and publish to GitHub Pages
+```
