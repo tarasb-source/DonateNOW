@@ -50,7 +50,7 @@ const [dialogSlug, setDialogSlug] = useState(null);
                             <h4 className="text-[1.2rem] font-[650]">{org.name}</h4>
                             <img
                                 className="inline-block h-auto w-[350px] max-w-full rounded-lg object-cover sm:w-[500px]"
-                                src={`${import.meta.env.BASE_URL}images/${org.image}`}
+                                src={org.imageUrl ?? `${import.meta.env.BASE_URL}images/${org.image}`}
                                 alt={org.name}
                             />
                             <h4 className="mt-2">About the organization:</h4>

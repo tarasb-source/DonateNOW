@@ -58,6 +58,12 @@ model Event {
   @@index([latitude, longitude])
 }
 
+enum EventStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 // A visitor clicked "Donate" on our site; its id is sent to Every.org as partner_donation_id.
 model DonationIntent {
   id            String             @id @default(uuid())
