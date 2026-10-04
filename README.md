@@ -62,6 +62,26 @@ npm run deploy    # build and publish the frontend to GitHub Pages
 | GET    | `/api/news`           | Ukraine news via GNews (cached 30 min)       |
 | GET    | `/api/events`         | Upcoming events (`?lat=&lng=&radius=` km sorts by distance) |
 | GET    | `/api/geocode`        | City name to coordinates via OpenStreetMap Nominatim |
+| POST   | `/api/donations`      | Start a donation; returns the Every.org donate link |
+| GET    | `/api/donations/stats`| Total raised through the site                |
+| POST   | `/api/donations/webhook/:secret` | Every.org partner webhook (completed donations) |
+
+### Donations (Every.org)
+
+Donations are processed by [Every.org](https://www.every.org): donors pay on Every.org, which sends
+the money to the charity and emails a tax receipt. DonateNOW never handles payments.
+
+1. Clicking **Donate** creates a `DonationIntent` and redirects to Every.org with its id as
+   `partner_donation_id`.
+2. Every.org calls our webhook when a donation completes; it's recorded once per charge
+   (monthly donations produce one record per month) and counted on the Home page.
+
+Every.org doesn't sign webhooks, so the endpoint is protected by `DONATION_WEBHOOK_SECRET` in its URL
+and only accepts donations that match an intent created on our site. Donatable charities are listed
+in `server/src/donations/charities.js` and `client/src/data/organizations.js` (`everyOrgSlug`).
+
+To test without real money, set `EVERYORG_BASE_URL=https://staging.every.org` and pay with card
+`4242 4242 4242 4242`.
 
 ### Importing events from Google
 
