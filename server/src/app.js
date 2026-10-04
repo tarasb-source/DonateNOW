@@ -5,6 +5,8 @@ import { config } from "./config.js";
 import opportunitiesRouter from "./routes/opportunities.js";
 import contactRouter from "./routes/contact.js";
 import newsRouter from "./routes/news.js";
+import eventsRouter from "./routes/events.js";
+import geocodeRouter from "./routes/geocode.js";
 
 const app = express();
 
@@ -17,6 +19,8 @@ app.get("/api/health", (req, res) => res.json({ ok: true }));
 app.use("/api/opportunities", opportunitiesRouter);
 app.use("/api/contact", contactRouter);
 app.use("/api/news", newsRouter);
+app.use("/api/events", eventsRouter);
+app.use("/api/geocode", geocodeRouter);
 
 app.use((req, res) => {
     res.status(404).json({ error: "Not found" });

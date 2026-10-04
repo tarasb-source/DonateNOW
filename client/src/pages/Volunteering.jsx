@@ -1,7 +1,9 @@
 import { useState } from "react";
-import CategoryFilter from "../components/CategoryFilter.jsx";
+import FilterButtons from "../components/FilterButtons.jsx";
 import OpportunityCard from "../components/OpportunityCard.jsx";
 import { categories } from "../data/categories.js";
+
+const categoryOptions = categories.map((category) => ({ value: category, label: category }));
 import { useOpportunities } from "../hooks/useOpportunities.js";
 
 export default function Volunteering() {
@@ -20,8 +22,8 @@ const { opportunities, loading, error } = useOpportunities({ search: searchTerm,
             />
             <hr className="border-gray-300" />
 
-            <CategoryFilter
-                categories={categories}
+            <FilterButtons
+                options={categoryOptions}
                 current={currentCategory}
                 onChange={setCurrentCategory}
             />

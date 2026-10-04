@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import Donate from './pages/Donate.jsx';
@@ -8,6 +9,9 @@ import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollToTop from './components/ScrollToTop.jsx';
 
+// Loaded on demand so the map library doesn't slow down the other pages.
+const Events = lazy(() => import('./pages/Events.jsx'));
+
 function App() {
 
   return (
@@ -15,13 +19,16 @@ function App() {
       <ScrollToTop />
       <Header />
       <main className="flex flex-1 flex-col">
+        <Suspense fallback={<p className="p-8 text-center">Loading...</p>}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/donate" element={<Donate />} />
           <Route path="/volunteering" element={<Volunteering />} />
+          <Route path="/events" element={<Events />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
+        </Suspense>
       </main>
       <Footer />
     </div>

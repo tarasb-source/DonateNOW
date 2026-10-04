@@ -29,3 +29,25 @@ model ContactMessage {
   newsletter Boolean  @default(false)
   createdAt  DateTime @default(now())
 }
+
+model Event {
+  id           Int       @id @default(autoincrement())
+  title        String
+  organization String
+  description  String    @default("")
+  category     String    @default("")
+  link         String    @default("")
+  startsAt     DateTime  @db.Timestamptz(3)
+  endsAt       DateTime? @db.Timestamptz(3)
+  // Human-readable place, plus coordinates for the map and distance search.
+  address      String    @default("")
+  city         String
+  country      String
+  latitude     Float
+  longitude    Float
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([startsAt])
+  @@index([latitude, longitude])
+}
