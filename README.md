@@ -106,3 +106,17 @@ Add rows in Supabase's Table Editor, run `npm run db:studio -w server`, or list 
 `server/prisma/seed-events.js` (see the example there) and run `npm run db:seed -w server`
 on an empty Event table. Each event needs a start time with timezone, a city/country,
 and latitude/longitude for the map.
+
+## Deployment
+
+| Part | Host | How |
+| ---- | ---- | --- |
+| Frontend (`client/`) | GitHub Pages | `npm run deploy` (builds with `client/.env.production`) |
+| API (`server/`) | Vercel | Deploys on push; project Root Directory = `server` |
+| Database | Supabase | `npm run db:deploy -w server` applies migrations |
+| Event import | GitHub Actions | Weekly; needs `DATABASE_URL` and `SERPAPI_KEY` secrets |
+
+Vercel environment variables (Project → Settings → Environment Variables), without quotes:
+`DATABASE_URL`, `DATABASE_POOL_MAX` (2-3), `CLIENT_ORIGINS` (`https://tarasb-source.github.io`),
+`PUBLIC_SITE_URL` (`https://tarasb-source.github.io/DonateNOW`), `GNEWS_API_KEY`,
+`EVERYORG_BASE_URL` (`https://www.every.org`), `EVERYORG_WEBHOOK_TOKEN`, `DONATION_WEBHOOK_SECRET`.

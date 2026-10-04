@@ -1,7 +1,8 @@
+// prisma-client-js generates plain JavaScript (the newer "prisma-client" generator emits
+// TypeScript, which serverless bundlers like Vercel's don't reliably run from JS imports).
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/generated/prisma"
-  moduleFormat = "esm"
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
