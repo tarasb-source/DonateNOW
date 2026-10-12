@@ -19,6 +19,17 @@ export default function DonateDialog({ charities, initialSlug, onClose }) {
         return () => window.removeEventListener("keydown", onKey);
     }, [onClose]);
 
+    useEffect(() => {
+        // If the donor hits "back" from Every.org, the browser can restore this exact page
+        // (and its React state) from bfcache instead of reloading it. Without this, "status"
+        // stays stuck at "redirecting" and the submit button stays disabled forever.
+        const onPageShow = (e) => {
+            if (e.persisted) setStatus("idle");
+        };
+        window.addEventListener("pageshow", onPageShow);
+        return () => window.removeEventListener("pageshow", onPageShow);
+    }, []);
+
     const chosenAmount = customAmount ? Number(customAmount) : amount;
     const charity = charities.find((c) => c.everyOrgSlug === slug);
 
