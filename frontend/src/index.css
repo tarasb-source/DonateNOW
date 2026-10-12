@@ -11,12 +11,16 @@
   --color-sunflower: #fdb833;
   --color-marine: #296eb4;
   --color-azure: #1789fc;
+  /* Opaque, not a translucent jasmine/15 - that composites against the system's
+     dark-mode canvas instead of white, since this site has no dark theme. */
+  --color-cream: #fff8eb;
 }
 
 @layer base {
   html {
     line-height: 1.5;
     text-rendering: optimizeLegibility;
+    @apply bg-cream;
 
     @variant sm {
       font-size: 19px;
@@ -24,7 +28,7 @@
   }
 
   body {
-    @apply bg-white text-black antialiased;
+    @apply bg-cream text-black antialiased;
   }
 
   h1, h2, h3, h4 {
