@@ -11,7 +11,7 @@ const { data: stats } = useFetch("donation-stats", getDonationStats);
 
     return (
         <>
-        <div className="flex justify-center border-b-[4px] border-black bg-jasmine">
+        <div className="flex justify-center bg-jasmine">
             <img
                 className="block h-auto max-h-[45vh] w-full sm:max-h-[85vh] sm:w-3/5"
                 src={`${import.meta.env.BASE_URL}images/Donate NOW logo.png`}
@@ -23,7 +23,7 @@ const { data: stats } = useFetch("donation-stats", getDonationStats);
             <p className="w-full text-center">DonateNOW is dedicated to providing immediate assistance to those affected by the crisis in Ukraine. Our mission is to mobilize resources and support for humanitarian aid, medical supplies, and essential services to help alleviate the suffering of individuals and communities impacted by the conflict.</p>
 
             {stats && (
-                <div className="m-4 border-[3px] border-black bg-sunflower p-6 text-center shadow-[6px_6px_0_0_#000]">
+                <div className="m-4 rounded-2xl bg-sunflower p-6 text-center shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
                     <h2>Raised through DonateNOW:</h2>
                     <span className="text-[30px] font-black">{formatUsd(stats.totalRaised)}</span>
                     <p className="mt-1 font-bold text-black/70">

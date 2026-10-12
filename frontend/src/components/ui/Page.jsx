@@ -4,7 +4,7 @@ export default function Page({ title, className = "", children }) {
             {title && (
                 <h1 className="relative mb-6 w-full text-center text-[2rem]">
                     {title}
-                    <span className="mx-auto mt-2 block h-[6px] w-20 bg-azure" />
+                    <span className="mx-auto mt-2 block h-1 w-16 rounded-full bg-azure" />
                 </h1>
             )}
             {children}

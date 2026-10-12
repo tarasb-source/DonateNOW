@@ -45,7 +45,7 @@ export default function EventMap({ events, origin, radiusKm, selectedId, onSelec
 
     return (
         // `isolate` keeps Leaflet's high z-indexes from covering the header menu and modals.
-        <div className="isolate size-full overflow-hidden border-[3px] border-black">
+        <div className="isolate size-full overflow-hidden rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.1)]">
             <MapContainer center={WORLD_VIEW.center} zoom={WORLD_VIEW.zoom} scrollWheelZoom={false} className="size-full">
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

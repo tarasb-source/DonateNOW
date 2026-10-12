@@ -10,7 +10,7 @@ const links = [
     { to: "/contact", label: "Contact" },
 ];
 
-const linkStyles = "px-2 py-1 font-extrabold uppercase tracking-wide text-black transition hover:bg-sunflower";
+const linkStyles = "rounded-md px-3 py-1.5 font-extrabold uppercase tracking-wide text-black transition hover:bg-sunflower";
 
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -21,22 +21,22 @@ export default function Header() {
 
     return (
         <>
-        <header className="relative z-50 w-full border-b-[4px] border-black bg-white py-4">
-            <div className="flex w-full items-center justify-between sm:justify-start sm:gap-6 sm:px-8">
+        <header className="relative z-50 w-full bg-white py-4 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+            <div className="flex w-full items-center justify-between sm:justify-start sm:gap-4 sm:px-8">
                 <Link to="/">
                     <img
-                        className="size-[75px] rounded-full border-[3px] border-black object-cover"
+                        className="size-[75px] rounded-full object-cover"
                         src={`${import.meta.env.BASE_URL}images/Logo.png`}
                         alt="donateNOW Logo"
                     />
                 </Link>
 
-                <nav className="hidden gap-6 sm:flex">
+                <nav className="hidden gap-2 sm:flex">
                     {navLinks}
                 </nav>
 
                 <button
-                    className="mr-4 cursor-pointer border-[3px] border-black bg-white p-2 text-2xl shadow-[3px_3px_0_0_#000] sm:hidden"
+                    className="mr-4 cursor-pointer rounded-md p-2 text-2xl hover:bg-jasmine sm:hidden"
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-label="Open menu"
                 >
@@ -47,16 +47,16 @@ export default function Header() {
 
         {menuOpen && (
             <div
-                className="fixed inset-0 z-90 bg-black/50 sm:hidden"
+                className="fixed inset-0 z-90 bg-black/50 backdrop-blur-[2px] sm:hidden"
                 onClick={() => setMenuOpen(false)}
             ></div>
         )}
 
         <nav
-            className={`fixed top-0 z-100 flex sm:hidden h-screen w-[180px] flex-col gap-6 border-l-[4px] border-black bg-white px-6 py-8 transition-[right] duration-300 ${menuOpen ? 'right-0' : '-right-[400px]'}`}
+            className={`fixed top-0 z-100 flex sm:hidden h-screen w-[180px] flex-col gap-2 bg-white px-6 py-8 shadow-[-4px_0_16px_rgba(0,0,0,0.15)] transition-[right] duration-300 ${menuOpen ? 'right-0' : '-right-[400px]'}`}
         >
             <button
-                className="cursor-pointer self-end border-[3px] border-black bg-white p-1 text-xl leading-none"
+                className="cursor-pointer self-end rounded-md p-2 text-xl hover:bg-jasmine"
                 onClick={() => setMenuOpen(false)}
                 aria-label="Close menu"
             >
