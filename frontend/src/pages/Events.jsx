@@ -18,9 +18,18 @@ export default function Events() {
     const [selectedId, setSelectedId] = useState(null);
     const { events, loading, error } = useEvents({ origin, radius });
 
+    // Clicking the already-selected event (card, marker, or the map's Recenter button)
+    // deselects it, so there's always a way back to the overview.
+    function toggleSelect(id) {
+        setSelectedId((current) => (current === id ? null : id));
+    }
+
     function selectFromMap(id) {
-        setSelectedId(id);
-        document.getElementById(`event-${id}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        const willSelect = selectedId !== id;
+        toggleSelect(id);
+        if (willSelect) {
+            document.getElementById(`event-${id}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
     }
 
     const radiusLabel = radiusOptions.find((o) => o.value === radius)?.label;
@@ -60,7 +69,7 @@ export default function Events() {
                         <p className="rounded-xl border border-dashed border-gray-300 p-8 font-semibold text-gray-600">{emptyMessage}</p>
                     ) : (
                         events.map((event) => (
-                            <EventCard key={event.id} event={event} selected={event.id === selectedId} onSelect={setSelectedId} />
+                            <EventCard key={event.id} event={event} selected={event.id === selectedId} onSelect={toggleSelect} />
                         ))
                     )}
                 </div>
