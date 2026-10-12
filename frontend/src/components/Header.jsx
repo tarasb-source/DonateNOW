@@ -53,7 +53,7 @@ export default function Header() {
         )}
 
         <nav
-            className={`fixed top-0 z-100 flex lg:hidden h-screen w-[min(260px,80vw)] flex-col gap-2 bg-white px-6 py-8 shadow-[-4px_0_16px_rgba(0,0,0,0.15)] transition-[right] duration-300 ${menuOpen ? 'right-0' : '-right-[400px]'}`}
+            className={`fixed top-0 z-100 flex lg:hidden h-screen w-[min(230px,75vw)] sm:w-[min(260px,80vw)] flex-col gap-2 bg-white px-6 py-8 shadow-[-4px_0_16px_rgba(0,0,0,0.15)] transition-[right] duration-300 ${menuOpen ? 'right-0' : '-right-[400px]'}`}
         >
             <button
                 className="cursor-pointer self-end rounded-md p-2 text-xl hover:bg-jasmine"
