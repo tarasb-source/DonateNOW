@@ -9,9 +9,9 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.donatenow</groupId>
-	<artifactId>server</artifactId>
+	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>DonateNowServer</name>
+	<name>DonateNowBackend</name>
 	<description>DonateNOW backend API</description>
 
 	<properties>

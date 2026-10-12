@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
 
   // GitHub Pages only serves static files, so a production build must know where the API lives.
   if (mode === 'production' && !env.VITE_API_URL) {
-    throw new Error('VITE_API_URL is not set. Add it to client/.env.production (the deployed API URL).')
+    throw new Error('VITE_API_URL is not set. Add it to frontend/.env.production (the deployed API URL).')
   }
 
   return {

@@ -3,8 +3,8 @@
 ## Project Structure
 
 ```
-client/       React + Vite + Tailwind frontend (deployed to GitHub Pages)
-server-java/  Spring Boot API + Spring Data JPA (PostgreSQL on Supabase)
+frontend/       React + Vite + Tailwind frontend (deployed to GitHub Pages)
+backend/  Spring Boot API + Spring Data JPA (PostgreSQL on Supabase)
 ```
 
 ## Development
@@ -12,8 +12,8 @@ server-java/  Spring Boot API + Spring Data JPA (PostgreSQL on Supabase)
 First-time setup:
 
 ```bash
-npm install                                    # installs client dependencies
-cp server-java/.env.example server-java/.env   # then fill in DATABASE_URL (Supabase session pooler)
+npm install                                    # installs frontend dependencies
+cp backend/.env.example backend/.env   # then fill in DATABASE_URL (Supabase session pooler)
 ```
 
 The database schema already exists in Supabase; the API reads and writes it through Spring Data JPA
@@ -23,11 +23,11 @@ Day to day:
 
 ```bash
 npm run dev       # frontend at http://localhost:5173/DonateNOW/ + API at http://localhost:3000
-npm run build     # production build in client/dist
+npm run build     # production build in frontend/dist
 npm run deploy    # build and publish the frontend to GitHub Pages
 ```
 
-The API alone: `cd server-java && ./mvnw spring-boot:run`.
+The API alone: `cd backend && ./mvnw spring-boot:run`.
 
 ### API
 
@@ -55,8 +55,8 @@ the money to the charity and emails a tax receipt. DonateNOW never handles payme
 
 Every.org doesn't sign webhooks, so the endpoint is protected by `DONATION_WEBHOOK_SECRET` in its URL
 and only accepts donations that match an intent created on our site. Donatable charities are listed
-in `server-java/src/main/java/com/donatenow/server/service/Charities.java` and
-`client/src/data/organizations.js` (`everyOrgSlug`).
+in `backend/src/main/java/com/donatenow/server/service/Charities.java` and
+`frontend/src/data/organizations.js` (`everyOrgSlug`).
 
 To test without real money, set `EVERYORG_BASE_URL=https://staging.every.org` and pay with card
 `4242 4242 4242 4242`.
@@ -77,13 +77,13 @@ city/country, and latitude/longitude for the map.
 
 | Part | Host | How |
 | ---- | ---- | --- |
-| Frontend (`client/`) | GitHub Pages | `npm run deploy` (builds with `client/.env.production`) |
-| API (`server-java/`) | Not yet configured | Needs a Java-friendly host (e.g. Render, Railway, Fly.io) |
+| Frontend (`frontend/`) | GitHub Pages | `npm run deploy` (builds with `frontend/.env.production`) |
+| API (`backend/`) | Not yet configured | Needs a Java-friendly host (e.g. Render, Railway, Fly.io) |
 | Database | Supabase | Schema managed directly; no migration tool wired up yet |
 
-`client/.env.production`'s `VITE_API_URL` still points at the old Node API deployment and needs
+`frontend/.env.production`'s `VITE_API_URL` still points at the old Node API deployment and needs
 updating once the Spring Boot API has a new home.
 
-The API reads its configuration from environment variables (see `server-java/.env.example`):
+The API reads its configuration from environment variables (see `backend/.env.example`):
 `DATABASE_URL`, `DATABASE_POOL_MAX`, `PORT`, `CLIENT_ORIGINS`, `PUBLIC_SITE_URL`, `GNEWS_API_KEY`,
 `EVERYORG_BASE_URL`, `EVERYORG_WEBHOOK_TOKEN`, `DONATION_WEBHOOK_SECRET`.
