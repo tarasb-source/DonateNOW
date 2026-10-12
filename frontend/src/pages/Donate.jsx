@@ -13,7 +13,7 @@ export default function Donate() {
 const [dialogSlug, setDialogSlug] = useState(null);
 
     return (
-        <Page title="Donate here!" className="sm:px-12 sm:pb-12">
+        <Page title="Donate here!" className="mt-[30px] sm:px-12 sm:pb-12">
             {donatable.length > 0 && (
                 <button
                     className={`${buttonStyles("primary", "lg")} mx-2`}
