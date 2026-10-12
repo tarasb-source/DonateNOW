@@ -6,11 +6,11 @@
 
   --font-sans: system-ui, Avenir, Helvetica, Arial, sans-serif;
 
-  --color-brand: #065ab5;
-  --color-brand-accent: #dfbe00;
-  --color-ua-blue: #056ebc;
-  --color-ua-yellow: #fed707;
-  --color-success: #0f700c;
+  --color-copperwood: #b1740f;
+  --color-jasmine: #ffd07b;
+  --color-sunflower: #fdb833;
+  --color-marine: #296eb4;
+  --color-azure: #1789fc;
 }
 
 @layer base {
@@ -28,7 +28,7 @@
   }
 
   h1, h2, h3, h4 {
-    @apply mb-2 leading-tight font-medium;
+    @apply mb-2 leading-tight font-black;
   }
 
   h1 { font-size: 2.5rem; }

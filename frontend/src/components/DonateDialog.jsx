@@ -40,21 +40,21 @@ export default function DonateDialog({ charities, initialSlug, onClose }) {
     }
 
     const toggleStyles = (active) =>
-        `flex-1 cursor-pointer rounded-md px-4 py-2 transition ${active ? "bg-brand text-white" : "bg-[#e7e7e7] hover:bg-[#d0d0d0]"}`;
+        `flex-1 cursor-pointer border-[3px] border-black px-4 py-2 font-extrabold uppercase transition ${active ? "bg-azure text-white" : "bg-white hover:bg-jasmine"}`;
 
     return (
-        <div className="fixed inset-0 z-100 bg-black/45" onClick={onClose}>
+        <div className="fixed inset-0 z-100 bg-black/60" onClick={onClose}>
             <form
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="donate-dialog-title"
                 onClick={(e) => e.stopPropagation()}
                 onSubmit={handleSubmit}
-                className="fixed top-1/2 left-1/2 z-110 flex max-h-[95vh] w-[95%] max-w-[500px] -translate-1/2 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-5 text-left shadow-md sm:p-7"
+                className="fixed top-1/2 left-1/2 z-110 flex max-h-[95vh] w-[95%] max-w-[500px] -translate-1/2 flex-col gap-4 overflow-y-auto border-[3px] border-black bg-white p-5 text-left shadow-[10px_10px_0_0_#000] sm:p-7"
             >
                 <button
                     type="button"
-                    className="absolute top-1 right-4 cursor-pointer p-2 text-2xl"
+                    className="absolute top-1 right-4 cursor-pointer border-[3px] border-black bg-white p-1 text-xl leading-none"
                     onClick={onClose}
                     aria-label="Close"
                 >
@@ -64,11 +64,11 @@ export default function DonateDialog({ charities, initialSlug, onClose }) {
                 <h2 id="donate-dialog-title" className="text-center text-2xl">Make a donation</h2>
 
                 <label className="flex flex-col gap-1">
-                    <span className="font-semibold">Charity</span>
+                    <span className="font-extrabold uppercase">Charity</span>
                     <select
                         value={slug}
                         onChange={(e) => setSlug(e.target.value)}
-                        className="rounded-md border-2 border-[#cccccc] px-3 py-2.5 focus:border-brand focus:outline-none"
+                        className="border-[3px] border-black px-3 py-2.5 focus:bg-jasmine focus:outline-none"
                     >
                         {charities.map((c) => (
                             <option key={c.everyOrgSlug} value={c.everyOrgSlug}>{c.name}</option>
@@ -102,22 +102,24 @@ export default function DonateDialog({ charities, initialSlug, onClose }) {
                     onChange={(e) => setCustomAmount(e.target.value)}
                     placeholder="Other amount ($)"
                     aria-label="Other amount in dollars"
-                    className="rounded-md border-2 border-[#cccccc] px-3 py-2.5 text-center focus:border-brand focus:outline-none"
+                    className="border-[3px] border-black px-3 py-2.5 text-center focus:bg-jasmine focus:outline-none"
                 />
 
                 <button
                     type="submit"
                     disabled={status === "redirecting"}
-                    className={`${buttonStyles("primary", "lg")} disabled:cursor-wait disabled:opacity-60`}
+                    className={`${buttonStyles("primary", "lg")} w-full text-center disabled:cursor-wait disabled:opacity-60`}
                 >
                     {status === "redirecting"
                         ? "Opening Every.org..."
                         : `Donate ${chosenAmount >= 1 ? `$${chosenAmount}` : ""}${frequency === "MONTHLY" ? " monthly" : ""}`}
                 </button>
 
-                {status === "error" && <p className="text-center text-red-700">{error}</p>}
+                {status === "error" && (
+                    <p className="border-[3px] border-black bg-red-200 p-3 text-center font-bold text-red-900">{error}</p>
+                )}
 
-                <p className="text-center text-sm text-gray-600">
+                <p className="text-center text-sm text-black/70">
                     You'll finish securely on <strong>Every.org</strong>, a nonprofit donation platform. Your gift goes
                     to {charity?.name ?? "the charity"}, and Every.org emails your tax receipt. DonateNOW never handles
                     your payment details.

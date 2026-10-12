@@ -6,7 +6,7 @@ import { organizations } from "../data/organizations.js";
 
 const donatable = organizations.filter((org) => org.everyOrgSlug);
 
-export default function Donate() { 
+export default function Donate() {
 // Every.org slug of the charity the dialog opens with, or null when closed.
 const [dialogSlug, setDialogSlug] = useState(null);
 
@@ -29,7 +29,7 @@ const [dialogSlug, setDialogSlug] = useState(null);
                 <ul className="list-disc pl-6">
                     <li>
                         <strong>Donate via Every.org:</strong> for organizations listed on{" "}
-                        <a href="https://www.every.org" target="_blank" rel="noopener noreferrer" className="text-brand underline">Every.org</a>,
+                        <a href="https://www.every.org" target="_blank" rel="noopener noreferrer" className="font-bold text-azure underline">Every.org</a>,
                         a nonprofit donation platform. Pay by card, PayPal, Venmo, Apple Pay, Google Pay, and more;
                         Every.org sends the funds to the charity and emails you a tax receipt.
                     </li>
@@ -44,18 +44,18 @@ const [dialogSlug, setDialogSlug] = useState(null);
                     src={`${import.meta.env.BASE_URL}images/Arrow Down.png`}
                     alt="Arrow Down"
                 />
-                <ol className="list-decimal pl-6 marker:font-bold">
-                    {organizations.map((org, i) => (
-                        <li key={org.name} className={`my-5 mb-8 px-1.5 pb-1.5 ${i % 2 === 0 ? "text-left" : "text-right"}`}>
-                            <h4 className="text-[1.2rem] font-[650]">{org.name}</h4>
+                <ol className="flex list-none flex-col gap-8 pl-0">
+                    {organizations.map((org) => (
+                        <li key={org.name} className="border-[3px] border-black bg-white p-5 text-left shadow-[6px_6px_0_0_#000] sm:p-7">
+                            <h4 className="text-[1.2rem]">{org.name}</h4>
                             <img
-                                className="inline-block h-auto w-[350px] max-w-full rounded-lg object-cover sm:w-[500px]"
+                                className="h-auto w-full max-w-[500px] object-cover"
                                 src={org.imageUrl ?? `${import.meta.env.BASE_URL}images/${org.image}`}
                                 alt={org.name}
                             />
-                            <h4 className="mt-2">About the organization:</h4>
+                            <h4 className="mt-3">About the organization:</h4>
                             <p>{org.description}</p>
-                            <div className={`mt-4 flex flex-wrap gap-3 ${i % 2 === 0 ? "justify-start" : "justify-end"}`}>
+                            <div className="mt-4 flex flex-wrap gap-3">
                                 {org.everyOrgSlug && (
                                     <button
                                         type="button"
@@ -69,7 +69,7 @@ const [dialogSlug, setDialogSlug] = useState(null);
                                     href={org.link}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={buttonStyles("success", "sm")}
+                                    className={buttonStyles("dark", "sm")}
                                 >
                                     Visit official website
                                 </a>

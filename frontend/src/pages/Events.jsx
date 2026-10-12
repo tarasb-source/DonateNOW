@@ -40,7 +40,7 @@ export default function Events() {
             <LocationBar origin={origin} onChange={setOrigin} />
             {origin && <FilterButtons options={radiusOptions} current={radius} onChange={setRadius} />}
 
-            <hr className="border-gray-300" />
+            <hr className="border-t-[3px] border-black" />
 
             <div className="grid gap-6 md:grid-cols-2">
                 <div className="h-[320px] md:sticky md:top-4 md:h-[600px]">
@@ -57,7 +57,7 @@ export default function Events() {
                     {error ? (
                         <p className="text-red-700">Couldn't load events. Please try again later.</p>
                     ) : !loading && events.length === 0 ? (
-                        <p className="rounded-lg border border-dashed border-gray-300 p-8 text-gray-600">{emptyMessage}</p>
+                        <p className="border-[3px] border-dashed border-black p-8 font-bold">{emptyMessage}</p>
                     ) : (
                         events.map((event) => (
                             <EventCard key={event.id} event={event} selected={event.id === selectedId} onSelect={setSelectedId} />

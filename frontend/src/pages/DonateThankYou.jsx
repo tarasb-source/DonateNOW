@@ -13,7 +13,7 @@ export default function DonateThankYou() {
             <p className="w-full max-w-2xl text-center">Want to do even more?</p>
             <div className="flex flex-wrap justify-center gap-3">
                 <Link to="/volunteering" className={buttonStyles()}>Find volunteer opportunities</Link>
-                <Link to="/events" className={buttonStyles("success")}>Attend an event</Link>
+                <Link to="/events" className={buttonStyles("dark")}>Attend an event</Link>
             </div>
         </Page>
     );

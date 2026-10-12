@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 
-const linkStyles = "mx-2.5 text-white hover:underline hover:opacity-80";
+const linkStyles = "mx-2.5 font-bold text-white underline decoration-2 underline-offset-2 hover:text-sunflower";
 
-export default function Footer() { 
-   
+export default function Footer() {
+
     return (
-        <footer className="border-t border-[#dbdbdb] bg-brand py-10 text-center text-sm font-[480] text-white">
+        <footer className="border-t-[4px] border-black bg-copperwood py-10 text-center text-sm font-bold text-white">
             <p>&copy; {new Date().getFullYear()} DonateNOW. All rights reserved.</p>
             <Link to="/about" className={linkStyles}>About Us</Link> |
-            <Link to="/contact" className={linkStyles}>Contact Us</Link> 
+            <Link to="/contact" className={linkStyles}>Contact Us</Link>
         </footer>
     );
 }

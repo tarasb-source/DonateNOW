@@ -4,7 +4,7 @@ import SuccessMessage from "../components/ui/SuccessMessage.jsx";
 import { buttonStyles } from "../components/ui/buttonStyles.js";
 import { sendContactMessage } from "../api/contact.js";
 
-const fieldStyles = "col-start-2 rounded border border-gray-300 p-3 placeholder:text-gray-400 focus:border-brand focus:outline-none";
+const fieldStyles = "col-start-2 border-[3px] border-black p-3 placeholder:text-black/40 focus:bg-jasmine focus:outline-none";
 
 export default function Contact() { 
 // "idle" | "sending" | "sent" | "error"
@@ -85,7 +85,7 @@ async function handleSubmit(e) {
                 <SuccessMessage>Your form was successfully submitted!🎉<br />Thank you for your interest!</SuccessMessage>
             )}
             { status === "error" && (
-                <p className="mt-6 rounded-[7px] border border-red-600 bg-red-100 p-4 text-center">
+                <p className="mt-6 border-[3px] border-black bg-red-200 p-4 text-center font-bold text-red-900 shadow-[5px_5px_0_0_#000]">
                     {errorMessage === "Invalid request" ? "Please check your details and try again." : errorMessage}
                 </p>
             )}

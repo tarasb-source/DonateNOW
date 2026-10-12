@@ -44,7 +44,7 @@ export default function LocationBar({ origin, onChange }) {
                 >
                     {locating ? "Locating..." : "📍 Use my location"}
                 </button>
-                <span className="text-gray-500">or</span>
+                <span className="font-bold">or</span>
                 <form onSubmit={handleSearch} className="flex flex-1 gap-2 sm:max-w-md">
                     <input
                         type="text"
@@ -52,7 +52,7 @@ export default function LocationBar({ origin, onChange }) {
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Enter a city, e.g. Chicago"
                         aria-label="City"
-                        className="min-w-0 flex-1 rounded-md border-2 border-[#cccccc] px-4 py-2.5 transition focus:border-brand focus:outline-none"
+                        className="min-w-0 flex-1 border-[3px] border-black px-4 py-2.5 transition focus:bg-jasmine focus:outline-none"
                     />
                     <button
                         type="submit"
@@ -64,12 +64,12 @@ export default function LocationBar({ origin, onChange }) {
                 </form>
             </div>
 
-            {error && <p className="text-red-700">{error}</p>}
+            {error && <p className="font-bold text-red-700">{error}</p>}
 
             {origin && (
                 <p>
                     Showing events near <strong>{origin.label}</strong>{" "}
-                    <button type="button" onClick={() => onChange(null)} className="cursor-pointer text-brand underline">
+                    <button type="button" onClick={() => onChange(null)} className="cursor-pointer font-extrabold text-azure underline">
                         Show all events
                     </button>
                 </p>

@@ -16,11 +16,11 @@ const { opportunities, loading, error } = useOpportunities({ search: searchTerm,
             <h2>Volunteer Opportunities:</h2>      
             <input
                 type="text"
-                className="w-full rounded-md border-2 border-[#cccccc] px-4 py-3 text-base transition focus:border-brand focus:shadow-[0_0_4px_rgba(6,90,181,0.4)] focus:outline-none"
+                className="w-full border-[3px] border-black px-4 py-3 text-base transition focus:bg-jasmine focus:outline-none"
                 placeholder="Search by title, org, or tags..."
                 onChange={(e) => {setSearchTerm(e.target.value)}}
             />
-            <hr className="border-gray-300" />
+            <hr className="border-t-[3px] border-black" />
 
             <FilterButtons
                 options={categoryOptions}
@@ -28,7 +28,7 @@ const { opportunities, loading, error } = useOpportunities({ search: searchTerm,
                 onChange={setCurrentCategory}
             />
 
-            <hr className="border-gray-300" />
+            <hr className="border-t-[3px] border-black" />
 
             {error ? (
                 <p className="text-red-700">Couldn't load opportunities. Please try again later.</p>
