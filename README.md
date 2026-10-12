@@ -12,7 +12,7 @@ https://tarasb-source.github.io/DonateNOW/
 - **Real donations through [Every.org](https://www.every.org)**: give one-time or monthly to verified US charities (Razom for Ukraine, Nova Ukraine, United Help Ukraine, Ukraine Aid Operations). Money goes directly to the charity and Every.org emails a tax receipt; DonateNOW never handles payments.
 - **Live donation counter** showing the total raised through the site
 - **Volunteer opportunities**: search and filter remote and in-person opportunities by category
-- **Events near you**: an interactive map of Ukrainian cultural events, concerts, and fundraisers, searchable by your location or any city. New events are found weekly and reviewed before they're published.
+- **Events near you**: an interactive map of Ukrainian cultural events, concerts, and fundraisers, searchable by your location or any city.
 - **Latest news** about Ukraine
 - **Contact form**
 - Responsive design (desktop & mobile friendly)
@@ -22,9 +22,9 @@ https://tarasb-source.github.io/DonateNOW/
 ## Built With
 
 - **Frontend:** React, Vite, Tailwind CSS, Leaflet + OpenStreetMap
-- **Backend:** Node.js, Express, Prisma, PostgreSQL (Supabase)
-- **Services:** Every.org (donations), GNews (news), SerpApi (event discovery)
-- **Hosting:** GitHub Pages (website), Vercel (API), GitHub Actions (weekly event updates)
+- **Backend:** Java, Spring Boot, Spring Data JPA, PostgreSQL (Supabase)
+- **Services:** Every.org (donations), GNews (news)
+- **Hosting:** GitHub Pages (website); API hosting not yet configured
 
 ---
 

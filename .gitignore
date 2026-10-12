@@ -23,12 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-server/.env
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# Generated Prisma client (rebuilt by `npm install` / `npm run db:generate -w server`)
-server/src/generated
