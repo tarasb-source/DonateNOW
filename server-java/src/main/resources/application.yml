@@ -1,0 +1,26 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: false
+
+server:
+  port: ${PORT:3000}
+
+app:
+  client-origins: ${CLIENT_ORIGINS:http://localhost:5173}
+  public-site-url: ${PUBLIC_SITE_URL:http://localhost:5173/DonateNOW}
+  gnews-api-key: ${GNEWS_API_KEY:}
+  every-org:
+    base-url: ${EVERYORG_BASE_URL:https://www.every.org}
+    webhook-token: ${EVERYORG_WEBHOOK_TOKEN:}
+    webhook-secret: ${DONATION_WEBHOOK_SECRET:}
+
+database:
+  url: ${DATABASE_URL}
+  pool-max: ${DATABASE_POOL_MAX:5}
