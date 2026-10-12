@@ -22,7 +22,7 @@ export default function Header() {
     return (
         <>
         <header className="relative z-50 w-full bg-white py-4 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
-            <div className="flex w-full items-center justify-between sm:justify-start sm:gap-4 sm:px-8">
+            <div className="flex w-full items-center justify-between lg:justify-start lg:gap-4 lg:px-8">
                 <Link to="/">
                     <img
                         className="size-[75px] rounded-full object-cover"
@@ -31,12 +31,12 @@ export default function Header() {
                     />
                 </Link>
 
-                <nav className="hidden gap-2 sm:flex">
+                <nav className="hidden gap-2 lg:flex">
                     {navLinks}
                 </nav>
 
                 <button
-                    className="mr-4 cursor-pointer rounded-md p-2 text-2xl hover:bg-jasmine sm:hidden"
+                    className="mr-4 cursor-pointer rounded-md p-2 text-2xl hover:bg-jasmine lg:hidden"
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-label="Open menu"
                 >
@@ -47,13 +47,13 @@ export default function Header() {
 
         {menuOpen && (
             <div
-                className="fixed inset-0 z-90 bg-black/50 backdrop-blur-[2px] sm:hidden"
+                className="fixed inset-0 z-90 bg-black/50 backdrop-blur-[2px] lg:hidden"
                 onClick={() => setMenuOpen(false)}
             ></div>
         )}
 
         <nav
-            className={`fixed top-0 z-100 flex sm:hidden h-screen w-[180px] flex-col gap-2 bg-white px-6 py-8 shadow-[-4px_0_16px_rgba(0,0,0,0.15)] transition-[right] duration-300 ${menuOpen ? 'right-0' : '-right-[400px]'}`}
+            className={`fixed top-0 z-100 flex lg:hidden h-screen w-[180px] flex-col gap-2 bg-white px-6 py-8 shadow-[-4px_0_16px_rgba(0,0,0,0.15)] transition-[right] duration-300 ${menuOpen ? 'right-0' : '-right-[400px]'}`}
         >
             <button
                 className="cursor-pointer self-end rounded-md p-2 text-xl hover:bg-jasmine"
