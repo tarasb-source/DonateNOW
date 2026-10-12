@@ -42,7 +42,7 @@ export default function LocationBar({ origin, onChange }) {
                     disabled={locating}
                     className={`${buttonStyles()} disabled:cursor-wait disabled:opacity-60`}
                 >
-                    {locating ? "Locating..." : "📍 Use my location"}
+                    {locating ? "Locating..." : "Use my location"}
                 </button>
                 <span className="font-semibold text-gray-500">or</span>
                 <form onSubmit={handleSearch} className="flex flex-1 gap-2 sm:max-w-md">
