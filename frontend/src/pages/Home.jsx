@@ -13,7 +13,7 @@ const { data: stats } = useFetch("donation-stats", getDonationStats);
 
     return (
         <>
-        <div className="flex justify-center bg-linear-to-b from-marine from-50% to-sunflower to-50%">
+        <div className="flex justify-center bg-linear-to-b from-[#016ebb] from-55% to-[#fed706] to-45%">
             <img
                 className="block h-auto max-h-[45vh] w-full sm:max-h-[85vh] sm:w-3/5"
                 src={`${import.meta.env.BASE_URL}images/Donate NOW logo.png`}
