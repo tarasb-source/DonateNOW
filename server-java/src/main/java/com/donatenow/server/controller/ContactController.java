@@ -40,7 +40,7 @@ public class ContactController {
                 request.name().trim(),
                 request.email().trim(),
                 request.message().trim(),
-                request.newsletter()
+                Boolean.TRUE.equals(request.newsletter())
         );
         repository.save(message);
 

@@ -8,6 +8,6 @@ public record ContactRequest(
         @NotBlank @Size(max = 100) String name,
         @NotBlank @Email @Size(max = 254) String email,
         @NotBlank @Size(max = 750) String message,
-        boolean newsletter
+        Boolean newsletter
 ) {
 }

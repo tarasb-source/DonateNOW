@@ -22,7 +22,7 @@ public class DataSourceConfig {
         String[] userInfo = uri.getUserInfo().split(":", 2);
 
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl("jdbc:postgresql://" + uri.getHost() + ":" + uri.getPort() + uri.getPath() + "?stringtype=unspecified");
+        dataSource.setJdbcUrl("jdbc:postgresql://" + uri.getHost() + ":" + uri.getPort() + uri.getPath());
         dataSource.setUsername(decode(userInfo[0]));
         dataSource.setPassword(decode(userInfo[1]));
         dataSource.setMaximumPoolSize(poolMax);

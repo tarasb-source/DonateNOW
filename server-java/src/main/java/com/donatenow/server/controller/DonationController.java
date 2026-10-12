@@ -4,7 +4,6 @@ import com.donatenow.server.config.AppProperties;
 import com.donatenow.server.dto.DonationRequest;
 import com.donatenow.server.dto.DonationStats;
 import com.donatenow.server.exception.RateLimitExceededException;
-import com.donatenow.server.model.Donation;
 import com.donatenow.server.model.DonationFrequency;
 import com.donatenow.server.model.DonationIntent;
 import com.donatenow.server.repository.DonationIntentRepository;
@@ -35,6 +34,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/donations")
@@ -72,10 +72,10 @@ public class DonationController {
         Integer amountCents = request.amount() != null ? (int) Math.round(request.amount() * 100) : null;
         DonationFrequency frequency = request.frequency() != null ? request.frequency() : DonationFrequency.ONCE;
 
-        DonationIntent intent = new DonationIntent(nonprofitSlug, amountCents, frequency);
-        donationIntentRepository.save(intent);
+        String intentId = UUID.randomUUID().toString();
+        donationIntentRepository.insert(intentId, nonprofitSlug, amountCents, frequency.name(), Instant.now());
 
-        String url = EveryOrgLinkBuilder.build(appProperties, nonprofitSlug, intent.getId(), amountCents, frequency);
+        String url = EveryOrgLinkBuilder.build(appProperties, nonprofitSlug, intentId, amountCents, frequency);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("url", url));
     }
 
@@ -130,7 +130,7 @@ public class DonationController {
             return;
         }
         try {
-            donationRepository.save(new Donation(chargeId, intentId, nonprofitSlug, nonprofitName, amountCents, netAmountCents, currency, frequency, donatedAt));
+            donationRepository.insert(chargeId, intentId, nonprofitSlug, nonprofitName, amountCents, netAmountCents, currency, frequency.name(), donatedAt, Instant.now());
         } catch (DataIntegrityViolationException alreadyRecordedByConcurrentRetry) {
         }
     }
