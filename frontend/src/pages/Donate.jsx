@@ -23,12 +23,12 @@ const [dialogSlug, setDialogSlug] = useState(null);
                 </button>
             )}
 
-            <div className="flex w-full flex-col gap-2">
+            <div className="flex w-full flex-col gap-3">
                 <h2>How donating works</h2>
                 <p>
                     DonateNOW doesn't collect money itself. Your donation goes straight to the organization you choose:
                 </p>
-                <ul className="list-disc pl-6">
+                <ul className="list-disc space-y-3 pl-6 leading-relaxed marker:text-azure">
                     <li>
                         <strong>Donate via Every.org:</strong> for organizations listed on{" "}
                         <a href="https://www.every.org" target="_blank" rel="noopener noreferrer" className="font-bold text-azure hover:underline">Every.org</a>,
@@ -40,9 +40,9 @@ const [dialogSlug, setDialogSlug] = useState(null);
                         on its own site.
                     </li>
                 </ul>
-                <h3 className="text-center">Here is the list of official organizations that need your help:</h3>
+                <h3 className="text-center mt-[30px]">Here is the list of official organizations that need your help:</h3>
                 <img
-                    className="size-[75px] self-center"
+                    className="size-[100px] self-center mb-[20px]"
                     src={`${import.meta.env.BASE_URL}images/Arrow Down.png`}
                     alt="Arrow Down"
                 />
