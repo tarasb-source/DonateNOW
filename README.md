@@ -3,7 +3,7 @@
 **DonateNOW** is a website that helps people support Ukraine: donate to verified charities, find volunteer opportunities, and discover Ukrainian events happening near them.
 
 **Live Website:**
-https://tarasb-source.github.io/DonateNOW/
+https://donate-now-swart.vercel.app/
 
 ---
 
