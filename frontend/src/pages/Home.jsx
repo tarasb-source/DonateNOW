@@ -13,7 +13,7 @@ const { data: stats } = useFetch("donation-stats", getDonationStats);
 
     return (
         <>
-        <div className="flex justify-center bg-linear-to-b from-[#016ebb] from-55% to-[#fed706] to-45%">
+        <div className="flex justify-center bg-linear-to-b from-[#016ebb] from-[51.27%] to-[#fed706] to-[48.73%]">
             <img
                 className="block h-auto max-h-[45vh] w-full sm:max-h-[85vh] sm:w-3/5"
                 src={`${import.meta.env.BASE_URL}images/Donate NOW logo.png`}
@@ -21,8 +21,10 @@ const { data: stats } = useFetch("donation-stats", getDonationStats);
             />
         </div>
         <Page>
-            <h2>Who we are?</h2>
-            <p className="w-full text-center">DonateNOW is dedicated to providing immediate assistance to those affected by the crisis in Ukraine. Our mission is to mobilize resources and support for humanitarian aid, medical supplies, and essential services to help alleviate the suffering of individuals and communities impacted by the conflict.</p>
+            <section className="flex w-full flex-col items-center gap-2">
+                <h2>Who we are?</h2>
+                <p className="w-full max-w-2xl text-center text-black/80">DonateNOW is dedicated to providing immediate assistance to those affected by the crisis in Ukraine. Our mission is to mobilize resources and support for humanitarian aid, medical supplies, and essential services to help alleviate the suffering of individuals and communities impacted by the conflict.</p>
+            </section>
 
             {stats && (() => {
                 const raised = stats.totalRaised;
@@ -32,7 +34,7 @@ const { data: stats } = useFetch("donation-stats", getDonationStats);
                 const reached = raised >= GOAL_USD;
 
                 return (
-                    <div className="m-4 w-full max-w-md rounded-2xl bg-sunflower p-6 text-center shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
+                    <div className="mt-8 w-full max-w-md rounded-2xl bg-[#fed706] p-7 text-center shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
                         <h2>{reached ? "Goal reached! 🎉" : "Help us reach our goal"}</h2>
                         <span className="text-[30px] font-black">
                             {reached ? formatUsd(raised) : `${formatUsd(remaining)} left`}
@@ -51,16 +53,17 @@ const { data: stats } = useFetch("donation-stats", getDonationStats);
                     </div>
                 );
             })()}
-            <p className="w-full text-center">Want to get involved, click below</p>
-            <img
-                className="mb-2 size-[75px] self-center"
-                src={`${import.meta.env.BASE_URL}images/Arrow Down.png`}
-                alt="Arrow Down"
-            />
-            <Link to="/donate" className={buttonStyles()}>
-                Help Ukraine Now!
-            </Link>
-            <News />
+
+            <section className="mt-10 flex w-full flex-col items-center gap-4">
+                <p className="text-xl font-bold">Want to get involved?</p>
+                <Link to="/donate" className={buttonStyles("primary", "lg")}>
+                    Help Ukraine Now!
+                </Link>
+            </section>
+
+            <div className="mt-12 w-full">
+                <News />
+            </div>
         </Page>
         </>
     );
