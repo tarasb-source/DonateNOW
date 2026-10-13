@@ -4,7 +4,7 @@ import SuccessMessage from "../components/ui/SuccessMessage.jsx";
 import { buttonStyles } from "../components/ui/buttonStyles.js";
 import { sendContactMessage } from "../api/contact.js";
 
-const fieldStyles = "col-start-2 rounded-md border-2 border-[#cccccc] p-3 placeholder:text-gray-400 focus:border-azure focus:outline-none";
+const fieldStyles = "w-full rounded-md border-2 border-[#cccccc] p-3 placeholder:text-gray-400 focus:border-azure focus:outline-none";
 
 export default function Contact() { 
 // "idle" | "sending" | "sent" | "error"
@@ -33,40 +33,40 @@ async function handleSubmit(e) {
 }
 
     return (
-        <Page title="Contact us!">
-            <p className="mb-12 w-full text-center">We would love to hear from you! Whether you have questions, feedback, or would like to get involved, please fill out the form below and we will get back to you as soon as possible.</p>
-            <form className="grid grid-cols-[1fr_2fr] gap-1 md:[&>label]:pl-[150px]"
+        <Page title="Contact us!" className="[&>h1]:mt-[30px]">
+            <p className="mb-12 w-full max-w-2xl text-center">We would love to hear from you! Whether you have questions, feedback, or would like to get involved, please fill out the form below and we will get back to you as soon as possible.</p>
+            <form className="grid w-full max-w-md grid-cols-[auto_1fr] items-start gap-x-4 gap-y-4"
                 onSubmit={handleSubmit}
                 onFocus={() => status !== "sending" && setStatus("idle")}
                 >
-                <label htmlFor="name">Name:</label>
-                <input 
-                    type="text" 
-                    id="name" 
+                <label htmlFor="name" className="pt-3 font-semibold">Name:</label>
+                <input
+                    type="text"
+                    id="name"
                     name="name"
                     className={fieldStyles}
-                    placeholder="Enter you name here" 
+                    placeholder="Enter you name here"
                     required />
-                <label htmlFor="email">Email:</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
+                <label htmlFor="email" className="pt-3 font-semibold">Email:</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
                     className={fieldStyles}
-                    placeholder="example@domain.com" 
+                    placeholder="example@domain.com"
                     required />
-                <label htmlFor="message">Message:</label>
-                <textarea 
-                    id="message" 
-                    name="message" 
-                    maxLength="750" 
-                    className={`${fieldStyles} resize-none sm:min-h-[200px] sm:w-[350px] md:w-[500px]`}
-                    placeholder="Your message here..." 
+                <label htmlFor="message" className="pt-3 font-semibold">Message:</label>
+                <textarea
+                    id="message"
+                    name="message"
+                    maxLength="750"
+                    className={`${fieldStyles} resize-none min-h-[150px] sm:min-h-[200px]`}
+                    placeholder="Your message here..."
                     onInput={ (textarea) => {
                         textarea.target.style.height = "auto";
                         textarea.target.style.height = (textarea.target.scrollHeight) + "px";
                     }}
-                    required>    
+                    required>
                 </textarea>
                 <div className="col-span-full mt-2 flex items-center gap-2 justify-self-center">
                     <input type="checkbox" id="newsletter" name="newsletter" value="Subscribe" className="cursor-pointer hover:opacity-80" />
