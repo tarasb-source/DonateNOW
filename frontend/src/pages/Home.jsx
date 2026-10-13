@@ -13,10 +13,10 @@ const { data: stats } = useFetch("donation-stats", getDonationStats);
 
     return (
         <>
-        <div className="flex justify-center bg-linear-to-b from-[#016ebb] from-[51.27%] to-[#fed706] to-[48.73%]">
+        <div className="flex justify-center bg-linear-to-b from-[#016ebb] from-[50.15%] to-[#fed706] to-[49.85%]">
             <img
                 className="block h-auto max-h-[45vh] w-full sm:max-h-[85vh] sm:w-3/5"
-                src={`${import.meta.env.BASE_URL}images/Donate NOW logo.png`}
+                src={`${import.meta.env.BASE_URL}images/Donate Logo.png`}
                 alt="Donate NOW logo"
             />
         </div>
@@ -61,7 +61,7 @@ const { data: stats } = useFetch("donation-stats", getDonationStats);
                 </Link>
             </section>
 
-            <div className="mt-12 w-full">
+            <div className="mt-12 w-full items-center gap-6 rounded-2xl p-6 text-center sm:flex sm:flex-row sm:justify-center">
                 <News />
             </div>
         </Page>
