@@ -14,7 +14,23 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: "/DonateNOW/",
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: "redirect-no-trailing-slash",
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (req.url === "/DonateNOW") {
+              res.writeHead(301, { Location: "/DonateNOW/" })
+              res.end()
+              return
+            }
+            next()
+          })
+        },
+      },
+    ],
     server: {
       // In dev, forward API calls to the Express server so no CORS setup is needed.
       proxy: {
