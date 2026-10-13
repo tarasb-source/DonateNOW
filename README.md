@@ -24,7 +24,7 @@ https://tarasb-source.github.io/DonateNOW/
 - **Frontend:** React, Vite, Tailwind CSS, Leaflet + OpenStreetMap
 - **Backend:** Java, Spring Boot, Spring Data JPA, PostgreSQL (Supabase)
 - **Services:** Every.org (donations), GNews (news)
-- **Hosting:** GitHub Pages (website); API hosting not yet configured
+- **Hosting:** GitHub Pages (website), Vercel (website mirror), Railway (API)
 
 ---
 
