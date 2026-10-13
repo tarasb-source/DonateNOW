@@ -9,7 +9,6 @@ const donatable = organizations.filter((org) => org.everyOrgSlug);
 const panelBackgrounds = ["bg-jasmine/40", "bg-azure/10"];
 
 export default function Donate() {
-// Every.org slug of the charity the dialog opens with, or null when closed.
 const [dialogSlug, setDialogSlug] = useState(null);
 
     return (

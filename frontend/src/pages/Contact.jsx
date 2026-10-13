@@ -6,8 +6,7 @@ import { sendContactMessage } from "../api/contact.js";
 
 const fieldStyles = "w-full rounded-md border-2 border-[#cccccc] p-3 placeholder:text-gray-400 focus:border-azure focus:outline-none";
 
-export default function Contact() { 
-// "idle" | "sending" | "sent" | "error"
+export default function Contact() {
 const [status, setStatus] = useState("idle");
 const [errorMessage, setErrorMessage] = useState("");
 

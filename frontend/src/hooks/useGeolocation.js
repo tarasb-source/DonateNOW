@@ -6,9 +6,8 @@ const messages = {
     error: "We couldn't get your location. Search for a city instead.",
 };
 
-// Asks for the browser's location only when locate() is called (e.g. from a button click).
 export function useGeolocation(onLocated) {
-    const [status, setStatus] = useState("idle"); // idle | locating | unsupported | denied | error
+    const [status, setStatus] = useState("idle");
 
     const locate = useCallback(() => {
         if (!navigator.geolocation) {

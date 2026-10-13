@@ -1,4 +1,3 @@
-// A row of pill buttons where one option is active. Options are { value, label }.
 export default function FilterButtons({ options, current, onChange }) {
     return (
         <div className="flex flex-wrap justify-center gap-2">

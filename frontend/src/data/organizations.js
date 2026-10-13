@@ -1,8 +1,3 @@
-// everyOrgSlug: the charity's Every.org slug if it accepts donations there (see server/src/donations/charities.js,
-// which must list the same slugs). Charities without one only link to their own website.
-// image is a file in public/images; imageUrl is a full URL (used for images from Every.org profiles).
-
-// Every.org's image CDN can resize; 3840px originals are far bigger than our cards need.
 const everyOrgImage = (path) => `https://res.cloudinary.com/everydotorg/image/upload/f_auto,c_limit,w_1000,q_80/${path}`;
 export const organizations = [
     {

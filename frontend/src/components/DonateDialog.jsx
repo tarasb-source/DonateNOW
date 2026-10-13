@@ -4,13 +4,12 @@ import { buttonStyles } from "./ui/buttonStyles.js";
 
 const PRESET_AMOUNTS = [10, 25, 50, 100, 250];
 
-// Collects charity/amount/frequency, then hands the donor off to Every.org to pay.
 export default function DonateDialog({ charities, initialSlug, onClose }) {
     const [slug, setSlug] = useState(initialSlug ?? charities[0]?.everyOrgSlug);
     const [amount, setAmount] = useState(25);
     const [customAmount, setCustomAmount] = useState("");
     const [frequency, setFrequency] = useState("ONCE");
-    const [status, setStatus] = useState("idle"); // idle | redirecting | error
+    const [status, setStatus] = useState("idle");
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -20,9 +19,6 @@ export default function DonateDialog({ charities, initialSlug, onClose }) {
     }, [onClose]);
 
     useEffect(() => {
-        // If the donor hits "back" from Every.org, the browser can restore this exact page
-        // (and its React state) from bfcache instead of reloading it. Without this, "status"
-        // stays stuck at "redirecting" and the submit button stays disabled forever.
         const onPageShow = (e) => {
             if (e.persisted) setStatus("idle");
         };

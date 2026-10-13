@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import Page from "../components/ui/Page.jsx";
 import { buttonStyles } from "../components/ui/buttonStyles.js";
 
-// Every.org sends donors here after a successful donation.
 export default function DonateThankYou() {
     return (
         <Page title="Thank you! 💙💛">

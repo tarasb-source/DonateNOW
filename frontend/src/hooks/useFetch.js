@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 
-// Runs fetcher(signal) whenever `key` changes, aborting the previous request.
-// Results remember which key they belong to, so "loading" is derived instead of stored,
-// and the previous data stays available while the next request is in flight.
 export function useFetch(key, fetcher) {
     const [result, setResult] = useState({ key: null, data: null, error: null });
 
@@ -16,7 +13,6 @@ export function useFetch(key, fetcher) {
             });
 
         return () => controller.abort();
-        // The fetcher is recreated every render; `key` captures everything it depends on.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [key]);
 

@@ -7,7 +7,6 @@ const dateFormat = new Intl.DateTimeFormat(undefined, {
 });
 const timeFormat = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" });
 
-// "Sat, Nov 14, 6:00 PM – 10:00 PM", or the full end date for multi-day events.
 export function formatEventDate(startsAt, endsAt) {
     const start = new Date(startsAt);
     if (!endsAt) return dateFormat.format(start);

@@ -12,14 +12,11 @@ const radiusOptions = [
 ];
 
 export default function Events() {
-    // { latitude, longitude, label } once the visitor shares a location or searches a city.
     const [origin, setOrigin] = useState(null);
     const [radius, setRadius] = useState(100);
     const [selectedId, setSelectedId] = useState(null);
     const { events, loading, error } = useEvents({ origin, radius });
 
-    // Clicking the already-selected event (card, marker, or the map's Recenter button)
-    // deselects it, so there's always a way back to the overview.
     function toggleSelect(id) {
         setSelectedId((current) => (current === id ? null : id));
     }

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --breakpoint-sm: 37.5rem; /* 600px */
-  --breakpoint-md: 50rem; /* 800px */
+  --breakpoint-sm: 37.5rem;
+  --breakpoint-md: 50rem;
 
   --font-sans: system-ui, Avenir, Helvetica, Arial, sans-serif;
 
@@ -11,8 +11,6 @@
   --color-sunflower: #fdb833;
   --color-marine: #296eb4;
   --color-azure: #1789fc;
-  /* Opaque, not a translucent jasmine/15 - that composites against the system's
-     dark-mode canvas instead of white, since this site has no dark theme. */
   --color-cream: #fff8eb;
 }
 

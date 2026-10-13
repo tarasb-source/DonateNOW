@@ -13,8 +13,6 @@ const sizes = {
     lg: "px-8 py-4 text-lg",
 };
 
-// Shared so links can look like buttons without nesting <button> inside <a>.
-// Pass variant/size instead of overriding bg-*/p-* classes, which would conflict.
 export function buttonStyles(variant = "primary", size = "md") {
     return `${base} ${variants[variant]} ${sizes[size]}`;
 }

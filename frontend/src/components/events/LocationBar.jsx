@@ -3,7 +3,6 @@ import { geocode } from "../../api/geocode.js";
 import { useGeolocation } from "../../hooks/useGeolocation.js";
 import { buttonStyles } from "../ui/buttonStyles.js";
 
-// Lets the visitor pick where to search from: their browser location or a typed city.
 export default function LocationBar({ origin, onChange }) {
     const handleLocated = useCallback((position) => onChange({ ...position, label: "your location" }), [onChange]);
     const { locating, error: locationError, locate } = useGeolocation(handleLocated);
@@ -20,7 +19,6 @@ export default function LocationBar({ origin, onChange }) {
         setSearchError(null);
         try {
             const place = await geocode(query.trim());
-            // Nominatim names are long ("Lviv, Lviv Urban Hromada, ..., Ukraine"); keep place + country.
             const parts = place.name.split(",").map((part) => part.trim());
             const label = parts.length > 1 ? `${parts[0]}, ${parts.at(-1)}` : parts[0];
             onChange({ latitude: place.latitude, longitude: place.longitude, label });

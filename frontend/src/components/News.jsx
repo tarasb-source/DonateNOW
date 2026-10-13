@@ -9,7 +9,6 @@ export default function News() {
 
     useEffect(() => {
         const controller = new AbortController();
-        // News is optional: if it fails, the section just doesn't render.
         getNews(controller.signal).then(setArticles).catch(() => {});
         return () => controller.abort();
     }, []);

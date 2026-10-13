@@ -10,7 +10,6 @@ import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollToTop from './components/ScrollToTop.jsx';
 
-// Loaded on demand so the map library doesn't slow down the other pages.
 const Events = lazy(() => import('./pages/Events.jsx'));
 
 function App() {

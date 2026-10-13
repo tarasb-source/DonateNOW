@@ -8,14 +8,12 @@ const WORLD_VIEW = { center: [30, 0], zoom: 2 };
 const BRAND = "#1789fc";
 const ACCENT = "#fdb833";
 
-// Frames the search radius/events; falls back to the whole world when there's nothing to show.
 function frameOverview(map, events, origin, radiusKm, animate) {
     const points = events.map((e) => [e.latitude, e.longitude]);
     const fit = animate ? map.flyToBounds.bind(map) : map.fitBounds.bind(map);
 
     if (origin) {
         const center = latLng(origin.latitude, origin.longitude);
-        // Frame the search radius when it's local; otherwise frame what we found.
         const bounds = radiusKm <= 500 ? center.toBounds(radiusKm * 2000) : latLngBounds([center]);
         points.forEach((p) => bounds.extend(p));
         fit(bounds, { padding: [20, 20], maxZoom: 12, duration: animate ? 0.6 : undefined });
@@ -28,8 +26,6 @@ function frameOverview(map, events, origin, radiusKm, animate) {
     }
 }
 
-// Keeps the view framed around the search area/events, flies to the selected event, and flies
-// back to the overview when it's deselected.
 function MapViewController({ events, origin, radiusKm, selected }) {
     const map = useMap();
     const frameKey = `${origin?.latitude},${origin?.longitude},${radiusKm},${events.map((e) => e.id).join(",")}`;
@@ -37,7 +33,6 @@ function MapViewController({ events, origin, radiusKm, selected }) {
 
     useEffect(() => {
         frameOverview(map, events, origin, radiusKm, false);
-        // frameKey summarizes events/origin/radius so we only refit when they change.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [map, frameKey]);
 
@@ -59,7 +54,6 @@ export default function EventMap({ events, origin, radiusKm, selectedId, onSelec
     const selected = events.find((e) => e.id === selectedId) ?? null;
 
     return (
-        // `isolate` keeps Leaflet's high z-indexes from covering the header menu and modals.
         <div className="isolate relative size-full overflow-hidden rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.1)]">
             <MapContainer center={WORLD_VIEW.center} zoom={WORLD_VIEW.zoom} scrollWheelZoom={false} className="size-full">
                 <TileLayer
