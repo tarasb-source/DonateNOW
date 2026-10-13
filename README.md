@@ -24,7 +24,7 @@ https://donate-now-swart.vercel.app/
 - **Frontend:** React, Vite, Tailwind CSS, Leaflet + OpenStreetMap
 - **Backend:** Java, Spring Boot, Spring Data JPA, PostgreSQL (Supabase)
 - **Services:** Every.org (donations), GNews (news)
-- **Hosting:** GitHub Pages (website), Vercel (website mirror), Railway (API)
+- **Hosting:** Vercel (website), GitHub Pages (website mirror), Railway (API)
 
 ---
 
