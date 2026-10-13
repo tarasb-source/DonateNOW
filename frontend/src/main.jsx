@@ -4,9 +4,11 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from "react-router-dom";
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/"
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter basename="/DonateNOW">
+    <BrowserRouter basename={basename}>
       <App />
     </BrowserRouter>
   </StrictMode>
