@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    base: "/DonateNOW/",
+    base: process.env.VERCEL ? "/" : "/DonateNOW/",
     plugins: [
       react(),
       tailwindcss(),
