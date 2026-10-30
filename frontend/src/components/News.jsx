@@ -4,16 +4,30 @@ import { getNews } from "../api/news.js";
 const arrowStyles = "absolute top-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-black/40 px-3 py-1 text-2xl text-white transition hover:bg-black/60";
 
 export default function News() {
-    const [articles, setArticles] = useState([]);
+    const [articles, setArticles] = useState(null);
+    const [failed, setFailed] = useState(false);
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
         const controller = new AbortController();
-        getNews(controller.signal).then(setArticles).catch(() => {});
+        getNews(controller.signal)
+            .then(setArticles)
+            .catch((error) => {
+                if (error.name !== "AbortError") setFailed(true);
+            });
         return () => controller.abort();
     }, []);
 
-    if (articles.length === 0) return null;
+    if (failed || articles?.length === 0) {
+        return (
+            <section className="w-full max-w-4xl">
+                <h2 className="text-center">Latest news</h2>
+                <p className="text-gray-600">News is unavailable right now. Please check back later.</p>
+            </section>
+        );
+    }
+
+    if (!articles) return null;
 
     const article = articles[index];
     const go = (step) => setIndex((index + step + articles.length) % articles.length);
