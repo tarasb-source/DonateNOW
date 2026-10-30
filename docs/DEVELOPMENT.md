@@ -4,7 +4,7 @@
 
 ```
 frontend/  React + Vite + Tailwind frontend (deployed to GitHub Pages and Vercel)
-backend/   Spring Boot API + Spring Data JPA (PostgreSQL on Supabase, deployed to Railway)
+backend/   Spring Boot API + Spring Data JPA (PostgreSQL on Supabase, deployed to Render via Docker)
 ```
 
 ## Development
@@ -79,16 +79,26 @@ city/country, and latitude/longitude for the map.
 | ---- | ---- | --- |
 | Frontend (`frontend/`) | GitHub Pages | `npm run deploy` (builds with `frontend/.env.production`) |
 | Frontend (`frontend/`) | Vercel | Deploys on push to `main`; Root Directory set to `frontend` |
-| API (`backend/`) | Railway | Deploys on push to `main`; Root Directory set to `backend` |
+| API (`backend/`) | Render | Docker web service built from the root `Dockerfile`; deploys on push to `main` |
 | Database | Supabase | Schema managed directly; no migration tool wired up yet |
 
 `frontend/.env.production`'s `VITE_API_URL` and Vercel's `VITE_API_URL` environment variable both
-need to point at the Railway API's public URL (Railway Settings → Networking → Generate Domain),
-with the `https://` scheme included.
+need to point at the Render service's URL (`https://<service>.onrender.com`), with the `https://`
+scheme included.
 
-Railway's `CLIENT_ORIGINS` environment variable must list every frontend origin allowed to call the
+Render's `CLIENT_ORIGINS` environment variable must list every frontend origin allowed to call the
 API (comma-separated), e.g. the GitHub Pages and Vercel URLs - otherwise the browser's CORS check
-rejects the request.
+rejects the request. Render sets `PORT` itself, so leave it unset there.
+
+On Render's free plan the service sleeps after 15 minutes without traffic; the first request after
+that takes roughly a minute while the container starts back up.
+
+To build and run the same image locally:
+
+```bash
+docker build -t donatenow-backend .
+docker run --env-file backend/.env -p 3000:3000 donatenow-backend
+```
 
 The API reads its configuration from environment variables (see `backend/.env.example`):
 `DATABASE_URL`, `DATABASE_POOL_MAX`, `PORT`, `CLIENT_ORIGINS`, `PUBLIC_SITE_URL`, `GNEWS_API_KEY`,
