@@ -19,6 +19,19 @@ cp backend/.env.example backend/.env   # then fill in DATABASE_URL (Supabase ses
 The database schema already exists in Supabase; the API reads and writes it through Spring Data JPA
 without running its own migrations.
 
+The `NewsCache` table keeps the last good GNews response so the news section survives API restarts
+and GNews outages. If it's missing, news still works but is only cached in memory. To create it, run
+this in Supabase's SQL Editor:
+
+```sql
+CREATE TABLE IF NOT EXISTS "NewsCache" (
+    id INTEGER PRIMARY KEY,
+    articles TEXT NOT NULL,
+    "fetchedAt" TIMESTAMPTZ NOT NULL
+);
+ALTER TABLE "NewsCache" ENABLE ROW LEVEL SECURITY;
+```
+
 Day to day:
 
 ```bash

@@ -90,17 +90,17 @@ public class DonationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Not found"));
         }
 
-        String chargeId = body.path("chargeId").asText(null);
-        String nonprofitSlug = body.path("toNonprofit").path("slug").asText(null);
-        String nonprofitName = body.path("toNonprofit").path("name").asText(nonprofitSlug);
-        String currency = body.path("currency").asText(null);
-        String donationDate = body.path("donationDate").asText(null);
+        String chargeId = body.path("chargeId").asString(null);
+        String nonprofitSlug = body.path("toNonprofit").path("slug").asString(null);
+        String nonprofitName = body.path("toNonprofit").path("name").asString(nonprofitSlug);
+        String currency = body.path("currency").asString(null);
+        String donationDate = body.path("donationDate").asString(null);
 
         if (chargeId == null || nonprofitSlug == null || currency == null || currency.length() != 3 || donationDate == null) {
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid payload"));
         }
 
-        String partnerDonationId = body.hasNonNull("partnerDonationId") ? body.get("partnerDonationId").asText() : null;
+        String partnerDonationId = body.hasNonNull("partnerDonationId") ? body.get("partnerDonationId").asString() : null;
         DonationIntent intent = partnerDonationId != null ? donationIntentRepository.findById(partnerDonationId).orElse(null) : null;
         if (intent == null) {
             return ResponseEntity.ok(Map.of("ok", true, "ignored", true));
@@ -113,7 +113,7 @@ public class DonationController {
         }
 
         Integer netAmountCents = body.hasNonNull("netAmount") ? toCents(body.path("netAmount")) : null;
-        String frequencyRaw = body.path("frequency").asText("");
+        String frequencyRaw = body.path("frequency").asString("");
         DonationFrequency frequency = frequencyRaw.toLowerCase().contains("month") ? DonationFrequency.MONTHLY : DonationFrequency.ONCE;
 
         recordDonation(chargeId, intent.getId(), nonprofitSlug, nonprofitName, amountCents, netAmountCents, currency.toUpperCase(), frequency, donatedAt);
@@ -150,7 +150,7 @@ public class DonationController {
             return null;
         }
         try {
-            double value = Double.parseDouble(node.asText().replace(",", ""));
+            double value = Double.parseDouble(node.asString().replace(",", ""));
             return (int) Math.round(value * 100);
         } catch (NumberFormatException e) {
             return null;
