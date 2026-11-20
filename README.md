@@ -1,3 +1,4 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/tarasb-source/DonateNOW/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/tarasb-source/DonateNOW/tree/master)
 # DonateNOW
 
 **DonateNOW** is a website that helps people support Ukraine: donate to verified charities, find volunteer opportunities, and discover Ukrainian events happening near them.
