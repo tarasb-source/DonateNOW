@@ -10,6 +10,7 @@ import com.donatenow.server.repository.NewsCacheRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -45,19 +46,36 @@ public class NewsService {
     private final NewsCacheRepository cacheRepository;
     private final ObjectMapper objectMapper;
     private final RestClient restClient;
+    private final Duration retryDelay;
 
     private List<NewsArticle> cachedArticles;
     private Instant nextFetchAt = Instant.EPOCH;
 
+    @Autowired
     public NewsService(AppProperties appProperties, NewsCacheRepository cacheRepository, ObjectMapper objectMapper) {
+        this(appProperties, cacheRepository, objectMapper,
+                RestClient.builder().requestFactory(timeoutRequestFactory()).build(), RETRY_DELAY);
+    }
+
+    NewsService(
+            AppProperties appProperties,
+            NewsCacheRepository cacheRepository,
+            ObjectMapper objectMapper,
+            RestClient restClient,
+            Duration retryDelay
+    ) {
         this.appProperties = appProperties;
         this.cacheRepository = cacheRepository;
         this.objectMapper = objectMapper;
+        this.restClient = restClient;
+        this.retryDelay = retryDelay;
+    }
 
+    private static SimpleClientHttpRequestFactory timeoutRequestFactory() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(GNEWS_TIMEOUT);
         requestFactory.setReadTimeout(GNEWS_TIMEOUT);
-        this.restClient = RestClient.builder().requestFactory(requestFactory).build();
+        return requestFactory;
     }
 
     public synchronized List<NewsArticle> getArticles() {
@@ -104,7 +122,7 @@ public class NewsService {
         } catch (RestClientException e) {
             log.warn("GNews request failed, retrying once: {}", describe(e));
             try {
-                Thread.sleep(RETRY_DELAY);
+                Thread.sleep(retryDelay);
             } catch (InterruptedException interrupted) {
                 Thread.currentThread().interrupt();
                 throw e;
