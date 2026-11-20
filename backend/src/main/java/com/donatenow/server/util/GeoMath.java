@@ -3,7 +3,6 @@ package com.donatenow.server.util;
 public class GeoMath {
 
     private static final double EARTH_RADIUS_KM = 6371;
-    private static final double KM_PER_DEGREE_LAT = 111.32;
 
     private GeoMath() {
     }
@@ -20,12 +19,16 @@ public class GeoMath {
     }
 
     public static BoundingBox boundingBox(double lat, double lng, double radiusKm) {
-        double dLat = radiusKm / KM_PER_DEGREE_LAT;
-        double cosLat = Math.cos(Math.toRadians(lat));
-        double dLng = cosLat > 0.01 ? radiusKm / (KM_PER_DEGREE_LAT * cosLat) : 360;
+        double angularRadius = radiusKm / EARTH_RADIUS_KM;
+        double dLat = Math.toDegrees(angularRadius);
 
         double minLat = Math.max(-90, lat - dLat);
         double maxLat = Math.min(90, lat + dLat);
+        if (lat + dLat >= 90 || lat - dLat <= -90) {
+            return new BoundingBox(minLat, maxLat, true, 0, 0);
+        }
+
+        double dLng = Math.toDegrees(Math.asin(Math.sin(angularRadius) / Math.cos(Math.toRadians(lat))));
         boolean wraps = lng - dLng < -180 || lng + dLng > 180;
 
         return wraps

@@ -1,0 +1,83 @@
+version: 2.1
+
+jobs:
+  frontend:
+    docker:
+      - image: cimg/node:26.13.1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-v1-{{ checksum "package-lock.json" }}
+            - npm-v1-
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - save_cache:
+          key: npm-v1-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/.npm
+      - run:
+          name: Lint
+          command: npm run lint
+      - run:
+          name: Build
+          command: npm run build
+      - store_artifacts:
+          path: frontend/dist
+          destination: frontend-dist
+
+  backend:
+    docker:
+      - image: cimg/openjdk:21.0.13
+        environment:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/donatenow
+          TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/donatenow
+      # The context-load test starts the full app, and the repository tests run real SQL, so both need a database.
+      - image: cimg/postgres:17.12
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: donatenow
+    working_directory: ~/project/backend
+    steps:
+      - checkout:
+          path: ~/project
+      - restore_cache:
+          keys:
+            - maven-v1-{{ checksum "pom.xml" }}
+            - maven-v1-
+      - run:
+          name: Wait for Postgres
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Test and package
+          command: sh mvnw -B verify
+      - save_cache:
+          key: maven-v1-{{ checksum "pom.xml" }}
+          paths:
+            - ~/.m2
+      - store_test_results:
+          path: target/surefire-reports
+      - store_artifacts:
+          path: target/surefire-reports
+          destination: test-reports
+
+  docker-build:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build the Render image
+          command: docker build -t donatenow-api .
+
+workflows:
+  build-and-test:
+    jobs:
+      - frontend
+      - backend
+      - docker-build:
+          requires:
+            - backend
