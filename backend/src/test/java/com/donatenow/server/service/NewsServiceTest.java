@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -18,8 +19,12 @@ import org.springframework.web.client.RestClient;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +41,7 @@ import static org.springframework.test.web.client.ExpectedCount.times;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.queryParam;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 class NewsServiceTest {
@@ -52,6 +58,10 @@ class NewsServiceTest {
 
     private final ObjectMapper objectMapper = JsonMapper.builder().build();
     private final NewsCacheRepository cacheRepository = mock(NewsCacheRepository.class);
+    private final MutableClock clock = new MutableClock();
+
+    // Background refreshes are queued here and run explicitly, so tests can check what visitors get meanwhile.
+    private final List<Runnable> backgroundTasks = new ArrayList<>();
 
     // Stands in for GNews. Any request the test didn't expect fails the test.
     private MockRestServiceServer gnews;
@@ -106,23 +116,33 @@ class NewsServiceTest {
     }
 
     @Test
-    void repeatRequestIsServedFromCache() {
+    void repeatRequestsWithinTwoHoursAreServedFromCache() {
         gnewsReturns(TWO_ARTICLES);
         NewsService service = service("test-key");
 
         List<NewsArticle> first = service.getArticles();
+        clock.advance(Duration.ofMinutes(119));
         List<NewsArticle> second = service.getArticles();
 
         assertThat(second).isEqualTo(first);
+        assertThat(backgroundTasks).isEmpty();
         gnews.verify();
     }
 
     @Test
-    void retriesOnceWhenGNewsFails() {
+    void retriesOnceWhenGNewsHasAServerError() {
         gnewsFails(once());
         gnewsReturns(TWO_ARTICLES);
 
         assertThat(service("test-key").getArticles()).hasSize(2);
+        gnews.verify();
+    }
+
+    @Test
+    void doesNotRetryWhenGNewsRejectsTheRequest() {
+        gnews.expect(once(), requestTo(startsWith(GNEWS_SEARCH))).andRespond(withStatus(HttpStatus.TOO_MANY_REQUESTS));
+
+        assertThatThrownBy(service("test-key")::getArticles).isInstanceOf(NewsUnavailableException.class);
         gnews.verify();
     }
 
@@ -132,8 +152,28 @@ class NewsServiceTest {
         NewsService service = service("test-key");
 
         assertThatThrownBy(service::getArticles).isInstanceOf(NewsUnavailableException.class);
+        clock.advance(Duration.ofMinutes(4));
         assertThatThrownBy(service::getArticles).isInstanceOf(NewsUnavailableException.class);
         gnews.verify();
+    }
+
+    @Test
+    void triesAgainOnceTheWaitHasPassed() {
+        gnews.expect(once(), requestTo(startsWith(GNEWS_SEARCH))).andRespond(withStatus(HttpStatus.TOO_MANY_REQUESTS));
+        gnewsReturns(TWO_ARTICLES);
+        NewsService service = service("test-key");
+
+        assertThatThrownBy(service::getArticles).isInstanceOf(NewsUnavailableException.class);
+        clock.advance(Duration.ofMinutes(5));
+
+        assertThat(service.getArticles()).hasSize(2);
+        gnews.verify();
+    }
+
+    @Test
+    void waitDoublesAfterEachFailureUpToTwoHours() {
+        assertThat(List.of(1, 2, 3, 4, 5, 6, 10).stream().map(NewsService::backoffAfter).map(Duration::toMinutes))
+                .containsExactly(5L, 10L, 20L, 40L, 80L, 120L, 120L);
     }
 
     @Test
@@ -148,25 +188,49 @@ class NewsServiceTest {
 
     @Test
     void freshSavedCopySkipsGNewsAfterRestart() {
-        givenSavedArticles(Instant.now().minus(Duration.ofMinutes(5)));
+        givenSavedArticles(clock.instant().minus(Duration.ofMinutes(30)));
 
         assertThat(service("test-key").getArticles()).extracting(NewsArticle::title).containsExactly("Saved story");
+        assertThat(backgroundTasks).isEmpty();
     }
 
     @Test
-    void staleSavedCopyIsRefreshedFromGNews() {
-        givenSavedArticles(Instant.now().minus(Duration.ofHours(2)));
+    void staleCopyIsServedImmediatelyAndRefreshedInTheBackground() {
+        givenSavedArticles(clock.instant().minus(Duration.ofHours(3)));
         gnewsReturns(TWO_ARTICLES);
+        NewsService service = service("test-key");
 
-        assertThat(service("test-key").getArticles()).extracting(NewsArticle::title).containsExactly("Kyiv update", "Aid arrives");
+        assertThat(service.getArticles()).extracting(NewsArticle::title).containsExactly("Saved story");
+
+        runBackgroundTasks();
+        assertThat(service.getArticles()).extracting(NewsArticle::title).containsExactly("Kyiv update", "Aid arrives");
+        gnews.verify();
     }
 
     @Test
-    void staleSavedCopyIsServedWhenGNewsIsDown() {
-        givenSavedArticles(Instant.now().minus(Duration.ofHours(2)));
-        gnewsFails(times(2));
+    void onlyOneBackgroundRefreshRunsAtATime() {
+        givenSavedArticles(clock.instant().minus(Duration.ofHours(3)));
+        NewsService service = service("test-key");
 
-        assertThat(service("test-key").getArticles()).extracting(NewsArticle::title).containsExactly("Saved story");
+        for (int visitor = 0; visitor < 50; visitor++) {
+            service.getArticles();
+        }
+
+        assertThat(backgroundTasks).hasSize(1);
+    }
+
+    @Test
+    void staleCopyIsKeptWhenTheBackgroundRefreshFails() {
+        givenSavedArticles(clock.instant().minus(Duration.ofHours(3)));
+        gnewsFails(times(2));
+        NewsService service = service("test-key");
+
+        service.getArticles();
+        runBackgroundTasks();
+
+        assertThat(service.getArticles()).extracting(NewsArticle::title).containsExactly("Saved story");
+        assertThat(backgroundTasks).isEmpty();
+        gnews.verify();
     }
 
     @Test
@@ -198,9 +262,38 @@ class NewsServiceTest {
         when(cacheRepository.findById(NewsCache.SINGLETON_ID)).thenReturn(Optional.of(new NewsCache(json, fetchedAt)));
     }
 
+    private void runBackgroundTasks() {
+        List<Runnable> tasks = new ArrayList<>(backgroundTasks);
+        backgroundTasks.clear();
+        tasks.forEach(Runnable::run);
+    }
+
     private NewsService service(String apiKey) {
         AppProperties properties = new AppProperties(List.of(), "https://donatenow.test", apiKey,
                 new AppProperties.EveryOrg("https://www.every.org", "", ""));
-        return new NewsService(properties, cacheRepository, objectMapper, restClient, Duration.ZERO);
+        return new NewsService(properties, cacheRepository, objectMapper, restClient, Duration.ZERO, backgroundTasks::add, clock);
+    }
+
+    private static final class MutableClock extends Clock {
+        private Instant now = Instant.parse("2026-11-21T12:00:00Z");
+
+        void advance(Duration duration) {
+            now = now.plus(duration);
+        }
+
+        @Override
+        public Instant instant() {
+            return now;
+        }
+
+        @Override
+        public ZoneId getZone() {
+            return ZoneOffset.UTC;
+        }
+
+        @Override
+        public Clock withZone(ZoneId zone) {
+            return this;
+        }
     }
 }

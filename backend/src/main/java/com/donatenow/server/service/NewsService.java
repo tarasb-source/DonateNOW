@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
@@ -22,22 +24,29 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class NewsService {
 
     private static final Logger log = LoggerFactory.getLogger(NewsService.class);
 
-    private static final Duration CACHE_TTL = Duration.ofMinutes(30);
+    // The free GNews plan delays articles by 12 hours, so refreshing more often than this gains little.
+    private static final Duration CACHE_TTL = Duration.ofHours(2);
     private static final Duration FAILURE_BACKOFF = Duration.ofMinutes(5);
     private static final Duration RETRY_DELAY = Duration.ofSeconds(2);
-    private static final Duration GNEWS_TIMEOUT = Duration.ofSeconds(10);
+    private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(3);
+    private static final Duration READ_TIMEOUT = Duration.ofSeconds(5);
     private static final int RESULTS_LIMIT = 5;
     private static final TypeReference<List<NewsArticle>> ARTICLE_LIST = new TypeReference<>() {
     };
@@ -47,14 +56,21 @@ public class NewsService {
     private final ObjectMapper objectMapper;
     private final RestClient restClient;
     private final Duration retryDelay;
+    private final Executor refreshExecutor;
+    private final Clock clock;
 
-    private List<NewsArticle> cachedArticles;
-    private Instant nextFetchAt = Instant.EPOCH;
+    private final Object lock = new Object();
+    private final AtomicBoolean refreshing = new AtomicBoolean(false);
+    private volatile List<NewsArticle> cachedArticles;
+    private volatile Instant nextFetchAt = Instant.EPOCH;
+    private volatile boolean savedCopyChecked;
+    private int consecutiveFailures;
 
     @Autowired
     public NewsService(AppProperties appProperties, NewsCacheRepository cacheRepository, ObjectMapper objectMapper) {
         this(appProperties, cacheRepository, objectMapper,
-                RestClient.builder().requestFactory(timeoutRequestFactory()).build(), RETRY_DELAY);
+                RestClient.builder().requestFactory(timeoutRequestFactory()).build(),
+                RETRY_DELAY, backgroundExecutor(), Clock.systemUTC());
     }
 
     NewsService(
@@ -62,64 +78,125 @@ public class NewsService {
             NewsCacheRepository cacheRepository,
             ObjectMapper objectMapper,
             RestClient restClient,
-            Duration retryDelay
+            Duration retryDelay,
+            Executor refreshExecutor,
+            Clock clock
     ) {
         this.appProperties = appProperties;
         this.cacheRepository = cacheRepository;
         this.objectMapper = objectMapper;
         this.restClient = restClient;
         this.retryDelay = retryDelay;
+        this.refreshExecutor = refreshExecutor;
+        this.clock = clock;
     }
 
     private static SimpleClientHttpRequestFactory timeoutRequestFactory() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(GNEWS_TIMEOUT);
-        requestFactory.setReadTimeout(GNEWS_TIMEOUT);
+        requestFactory.setConnectTimeout(CONNECT_TIMEOUT);
+        requestFactory.setReadTimeout(READ_TIMEOUT);
         return requestFactory;
     }
 
-    public synchronized List<NewsArticle> getArticles() {
+    private static Executor backgroundExecutor() {
+        return Executors.newSingleThreadExecutor(task -> {
+            Thread thread = new Thread(task, "news-refresh");
+            thread.setDaemon(true);
+            return thread;
+        });
+    }
+
+    // Serves whatever copy exists right away and refreshes it in the background, so a slow or
+    // failing GNews never holds up visitors. Only the very first request, with no copy anywhere, waits.
+    public List<NewsArticle> getArticles() {
         String apiKey = appProperties.gnewsApiKey();
         if (apiKey == null || apiKey.isBlank()) {
             throw new NewsNotConfiguredException();
         }
 
-        if (cachedArticles == null) {
-            loadSavedArticles();
-        }
-
-        Instant now = Instant.now();
-        if (now.isBefore(nextFetchAt)) {
-            if (cachedArticles != null) {
-                return cachedArticles;
+        if (!savedCopyChecked) {
+            synchronized (lock) {
+                if (!savedCopyChecked) {
+                    loadSavedArticles();
+                    savedCopyChecked = true;
+                }
             }
-            throw new NewsUnavailableException();
         }
 
-        try {
-            List<NewsArticle> articles = fetchWithRetry(apiKey);
-            if (!articles.isEmpty()) {
-                cachedArticles = articles;
-                nextFetchAt = now.plus(CACHE_TTL);
-                saveArticles(articles, now);
-                return articles;
+        List<NewsArticle> articles = cachedArticles;
+        if (articles != null) {
+            if (isDue()) {
+                refreshInBackground(apiKey);
             }
-            log.warn("GNews returned no articles");
-        } catch (RestClientException e) {
-            log.warn("Could not load news from GNews: {}", describe(e));
+            return articles;
         }
 
-        nextFetchAt = now.plus(FAILURE_BACKOFF);
+        synchronized (lock) {
+            if (cachedArticles == null && isDue()) {
+                refresh(apiKey);
+            }
+        }
         if (cachedArticles != null) {
             return cachedArticles;
         }
         throw new NewsUnavailableException();
     }
 
+    private boolean isDue() {
+        return !clock.instant().isBefore(nextFetchAt);
+    }
+
+    private void refreshInBackground(String apiKey) {
+        if (!refreshing.compareAndSet(false, true)) {
+            return;
+        }
+        try {
+            refreshExecutor.execute(() -> {
+                try {
+                    synchronized (lock) {
+                        if (isDue()) {
+                            refresh(apiKey);
+                        }
+                    }
+                } finally {
+                    refreshing.set(false);
+                }
+            });
+        } catch (RejectedExecutionException e) {
+            refreshing.set(false);
+        }
+    }
+
+    private void refresh(String apiKey) {
+        Instant now = clock.instant();
+        try {
+            List<NewsArticle> articles = fetchWithRetry(apiKey);
+            if (!articles.isEmpty()) {
+                cachedArticles = articles;
+                consecutiveFailures = 0;
+                nextFetchAt = now.plus(CACHE_TTL);
+                saveArticles(articles, now);
+                return;
+            }
+            log.warn("GNews returned no articles");
+        } catch (RestClientException e) {
+            log.warn("Could not load news from GNews: {}", describe(e));
+        }
+
+        consecutiveFailures++;
+        nextFetchAt = now.plus(backoffAfter(consecutiveFailures));
+    }
+
+    static Duration backoffAfter(int failures) {
+        Duration wait = FAILURE_BACKOFF.multipliedBy(1L << Math.min(failures - 1, 10));
+        return wait.compareTo(CACHE_TTL) < 0 ? wait : CACHE_TTL;
+    }
+
+    // Retrying only helps with timeouts and GNews outages; a 4xx (bad key, quota used up) would fail again.
     private List<NewsArticle> fetchWithRetry(String apiKey) {
         try {
             return fetchFromGNews(apiKey);
-        } catch (RestClientException e) {
+        } catch (ResourceAccessException | HttpServerErrorException e) {
             log.warn("GNews request failed, retrying once: {}", describe(e));
             try {
                 Thread.sleep(retryDelay);

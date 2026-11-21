@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,12 +44,21 @@ class NewsControllerTest {
     }
 
     @Test
+    void browsersMayReuseArticlesForFiveMinutes() throws Exception {
+        when(newsService.getArticles()).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/news"))
+                .andExpect(header().string("Cache-Control", "max-age=300, public"));
+    }
+
+    @Test
     void gnewsFailureIsBadGateway() throws Exception {
         when(newsService.getArticles()).thenThrow(new NewsUnavailableException());
 
         mockMvc.perform(get("/api/news"))
                 .andExpect(status().isBadGateway())
-                .andExpect(jsonPath("$.error").value("Could not load news."));
+                .andExpect(jsonPath("$.error").value("Could not load news."))
+                .andExpect(header().doesNotExist("Cache-Control"));
     }
 
     @Test
