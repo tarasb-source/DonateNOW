@@ -26,5 +26,7 @@ export function useGeolocation(onLocated) {
         );
     }, [onLocated]);
 
-    return { locating: status === "locating", error: messages[status] ?? null, locate };
+    const clearError = useCallback(() => setStatus((current) => (current === "locating" ? current : "idle")), []);
+
+    return { locating: status === "locating", error: messages[status] ?? null, locate, clearError };
 }

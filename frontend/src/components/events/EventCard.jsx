@@ -1,7 +1,7 @@
 import { formatEventDate } from "../../lib/formatDate.js";
 
 export default function EventCard({ event, selected, onSelect }) {
-    const { id, title, organization, description, category, link, startsAt, endsAt, address, city, country, distanceKm } = event;
+    const { id, title, organization, description, category, link, address, city, country, distanceKm } = event;
 
     return (
         <article
@@ -13,14 +13,14 @@ export default function EventCard({ event, selected, onSelect }) {
         >
             <div className="flex items-start justify-between gap-3">
                 <h3 className="m-0 text-xl text-marine">{title}</h3>
-                {distanceKm !== undefined && (
+                {distanceKm != null && (
                     <span className="shrink-0 rounded-full bg-sunflower px-2 py-0.5 text-sm font-bold">
                         {distanceKm < 1 ? "<1" : Math.round(distanceKm)} km
                     </span>
                 )}
             </div>
             <p className="mt-1 text-sm font-semibold text-black/60">{organization}{category && ` · ${category}`}</p>
-            <p className="mt-2 font-bold">{formatEventDate(startsAt, endsAt)}</p>
+            <p className="mt-2 font-bold">{formatEventDate(event)}</p>
             <p>{[address, city, country].filter(Boolean).join(", ")}</p>
             {description && <p className="mt-2 leading-[1.4rem]">{description}</p>}
             {link && (
