@@ -5,6 +5,7 @@ import com.donatenow.server.exception.NewsNotConfiguredException;
 import com.donatenow.server.exception.NewsUnavailableException;
 import com.donatenow.server.service.NewsService;
 
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,12 +13,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/news")
 public class NewsController {
+
+    private static final Duration BROWSER_CACHE = Duration.ofMinutes(5);
 
     private final NewsService newsService;
 
@@ -26,8 +30,10 @@ public class NewsController {
     }
 
     @GetMapping
-    public List<NewsArticle> getNews() {
-        return newsService.getArticles();
+    public ResponseEntity<List<NewsArticle>> getNews() {
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(BROWSER_CACHE).cachePublic())
+                .body(newsService.getArticles());
     }
 
     @ExceptionHandler(NewsNotConfiguredException.class)
