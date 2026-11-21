@@ -5,7 +5,7 @@ import { buttonStyles } from "../ui/buttonStyles.js";
 
 export default function LocationBar({ origin, onChange }) {
     const handleLocated = useCallback((position) => onChange({ ...position, label: "your location" }), [onChange]);
-    const { locating, error: locationError, locate } = useGeolocation(handleLocated);
+    const { locating, error: locationError, locate, clearError: clearLocationError } = useGeolocation(handleLocated);
 
     const [query, setQuery] = useState("");
     const [searching, setSearching] = useState(false);
@@ -17,6 +17,7 @@ export default function LocationBar({ origin, onChange }) {
 
         setSearching(true);
         setSearchError(null);
+        clearLocationError();
         try {
             const place = await geocode(query.trim());
             const parts = place.name.split(",").map((part) => part.trim());

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Iterator;
@@ -22,9 +23,17 @@ public class GeocodeService {
     private static final Duration MIN_INTERVAL = Duration.ofMillis(1100);
     private static final int MAX_CACHE_ENTRIES = 500;
 
-    private final RestClient restClient = RestClient.create();
+    private final RestClient restClient;
     private final Map<String, Place> cache = new LinkedHashMap<>();
     private Instant lastCallAt = Instant.EPOCH;
+
+    public GeocodeService() {
+        this(RestClient.create());
+    }
+
+    GeocodeService(RestClient restClient) {
+        this.restClient = restClient;
+    }
 
     public synchronized Place geocode(String query) {
         String key = query.toLowerCase();
@@ -34,6 +43,9 @@ public class GeocodeService {
 
         throttle();
         Place place = fetchFromNominatim(query);
+        if (place == null) {
+            return null;
+        }
 
         if (cache.size() >= MAX_CACHE_ENTRIES) {
             Iterator<String> oldest = cache.keySet().iterator();
@@ -45,12 +57,14 @@ public class GeocodeService {
     }
 
     private Place fetchFromNominatim(String query) {
-        String url = UriComponentsBuilder.fromUriString("https://nominatim.openstreetmap.org/search")
+        URI url = UriComponentsBuilder.fromUriString("https://nominatim.openstreetmap.org/search")
                 .queryParam("q", query)
                 .queryParam("format", "jsonv2")
                 .queryParam("limit", "1")
                 .queryParam("accept-language", "en")
-                .toUriString();
+                .encode()
+                .build()
+                .toUri();
 
         List<NominatimResult> results = restClient.get()
                 .uri(url)
